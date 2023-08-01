@@ -1,0 +1,28 @@
+{
+    "transform": {
+        "^.+\\.(t|j)sx?$": "ts-jest"
+    },
+    "testRegex": "(/__tests__/.*|(\\.|/)(test|spec))\\.(jsx?|tsx?)$",
+    "moduleFileExtensions": [
+        "ts",
+        "tsx",
+        "js",
+        "jsx",
+        "json",
+        "node"
+    ],
+    "moduleDirectories": [
+        ".",
+        "node_modules"
+    ],
+    "moduleNameMapper": {
+        "^@root/(.*)$": "<rootDir>/src/$1",
+        "^@interfaces/(.*)$": "<rootDir>/src/types/$1",
+        "^@utils/(.*)$": "<rootDir>/src/utils/$1"
+    },
+    "globals": {
+        "ts-jest": {
+            "tsConfig": "tsconfig.json"
+        }
+    }
+}

@@ -1,0 +1,19 @@
+{
+	"compilerOptions": {
+		"target": "es6",
+		"module": "commonjs",
+		"declaration": true,
+		"baseUrl": ".",
+		"outDir": "./lib",
+		"strict": true,
+		"paths": {
+			"@root/*": ["src/*"],
+			"@interfaces": ["src/types/types.ts"],
+			"@utils/*": ["utils/*"],
+		},
+		"types": ["@types/jest", "@types/node"],
+	},
+	"include": ["src"],
+	
+	"exclude": ["node_modules", "**/__tests__/*"]
+}
