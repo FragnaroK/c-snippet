@@ -1,4 +1,4 @@
-import * as fs from 'fs';
+import { readFile } from 'fs';
 import { parse, stringify } from 'cson-parser';
 import { ParsedSnippet } from "@interfaces"
 import { addKeysToObject } from '../helpers';
@@ -14,7 +14,7 @@ const getSourcesFromObject = (parsedCSON: ParsedSnippet[]): string[] => {
 
 const parseFile = (filePath: string): Promise<ParsedSnippet> => {
     return new Promise((resolve, reject) => {
-        fs.readFile(filePath, 'utf8', (err, csonContent) => {
+        readFile(filePath, 'utf8', (err, csonContent) => {
             if (err) {
                 reject(`Error reading file: ${err.message}`);
             } else {
@@ -73,6 +73,7 @@ const stringifySnippet = (snippets: ParsedSnippet[]): string => {
 };
 
 const CSON = {
+    stringify,
     parseFile,
     parseString,
     stringifySnippet,

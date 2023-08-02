@@ -1,5 +1,10 @@
 import CSON from './cson';
+import CSN from './csn';
 
-export default {
-    CSON
+
+const Parsers = {
+    CSON,
+    CSN
 }
+
+export default Parsers;

@@ -1,10 +1,11 @@
-import Utils from "../utils/utils";
-import { ParsedSnippet } from "../types/types";
+import Utils from "../../utils/utils";
+import { ParsedSnippet } from "../../types/types";
+declare const reporter: any;
+
 
 const {
     CSON
 } = Utils;
-
 
 // Collection of snippets to test
 const Snippet: ParsedSnippet[] = [
@@ -72,18 +73,33 @@ const RawSnippets = [
 `
 ];
 
+beforeEach(() => {
+  reporter
+  .epic('Parsers - Atom Snippets')
+  .feature('Parse snippets from Atom')
+  .story('')
+  .description(expect.getState().currentTestName);
+  });
+
 describe('CSON.parseString', () => {
-    it('should parse a CSON string into a ParsedSnippet array', () => {
+    it('should parse a CSON string into a ParsedSnippet array', async () => {
+        await reporter.startStep('Parse CSON string into ParsedSnippet array');
         const parsedSnippets: ParsedSnippet[] = CSON.parseString(RawSnippets[0]);
+        await reporter.endStep();
 
+        await reporter.startStep('Expect parsedSnippets to be an array');
         expect(parsedSnippets).toHaveLength(1);
+        await reporter.endStep();
 
+        await reporter.startStep('Expect parsedSnippets to have properties: name, description, prefix, body, scope');
         expect(parsedSnippets[0]).toHaveProperty('name');
         expect(parsedSnippets[0]).toHaveProperty('description');
         expect(parsedSnippets[0]).toHaveProperty('prefix');
         expect(parsedSnippets[0]).toHaveProperty('body');
         expect(parsedSnippets[0]).toHaveProperty('scope');
+        await reporter.endStep();
 
+        await reporter.startStep('Expect parsedSnippets to match object and types: name, description, prefix, body, scope');
         expect(parsedSnippets[0]).toMatchObject({
             name: expect.any(String),
             description: expect.any(String),
@@ -91,18 +107,11 @@ describe('CSON.parseString', () => {
             body: expect.any(Array),
             scope: expect.any(String)
         });
+        await reporter.endStep();
 
-        expect(parsedSnippets[0]).toEqual({
-            name: 'For Loop',
-            description: 'No description provided',
-            prefix: 'forloop',
-            body: [
-                'for (let i = 1; i <= ${1:number}; i++) {',
-                '  ${2:// Your code here}',
-                '}'
-            ],
-            scope: '.source.js'
-        });
+        await reporter.startStep('Expect parsedSnippets to be properly parsed');
+        expect(parsedSnippets[0]).toEqual(Snippet[0]);
+        await reporter.endStep();
     });
 });
 

@@ -17,8 +17,7 @@
             ],
             "cwd": "c:\\Users\\aleca\\Documents\\GitHub\\c-snippet",
             "console": "integratedTerminal",
-            "internalConsoleOptions": "neverOpen",
-            "disableOptimisticBPs": true,
+            "internalConsoleOptions": "neverOpen", 
             "runtimeExecutable": "npm"
         }
     ]

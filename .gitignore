@@ -128,3 +128,7 @@ dist
 
 # ignore compiled code
 /lib
+
+# ignore allure report
+/allure-report
+/allure-results

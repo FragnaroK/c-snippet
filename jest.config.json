@@ -1,8 +1,16 @@
 {
+    "reporters": [
+        "default",
+        "jest-allure"
+    ],
     "transform": {
         "^.+\\.(t|j)sx?$": "ts-jest"
     },
-    "testRegex": "(/__tests__/.*|(\\.|/)(test|spec))\\.(jsx?|tsx?)$",
+    "testMatch": [
+        "**/__tests__/**/*.ts?(x)",
+        "**/?(*.)+(spec|test).ts?(x)"
+    ],
+    "testRunner": "jest-jasmine2",
     "moduleFileExtensions": [
         "ts",
         "tsx",
@@ -12,7 +20,7 @@
         "node"
     ],
     "moduleDirectories": [
-        ".",
+        "<rootDir>",
         "node_modules"
     ],
     "moduleNameMapper": {
@@ -20,9 +28,7 @@
         "^@interfaces/(.*)$": "<rootDir>/src/types/$1",
         "^@utils/(.*)$": "<rootDir>/src/utils/$1"
     },
-    "globals": {
-        "ts-jest": {
-            "tsConfig": "tsconfig.json"
-        }
-    }
+    "setupFilesAfterEnv": [
+        "jest-allure/dist/setup"
+    ]
 }

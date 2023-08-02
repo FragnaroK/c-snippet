@@ -33,10 +33,22 @@ export interface AtomSnippet {
     scope?: string;
 }
 
+
+export type DreamweaverSnippetContent = {
+    $: {
+        name?: string;
+        description?: string;
+        preview?: string;
+        type?: string;
+    };
+    insertText?: {
+        $: {
+            location: "beforeSelection" | "afterSelection";
+        };
+        _: string;
+    }[];
+}
+
 export interface DreamweaverSnippet {
-    name?: string;
-    shortcut?: string;
-    code: string;
-    description?: string;
-    scope?: string;
+    snippet: DreamweaverSnippetContent;
 }
