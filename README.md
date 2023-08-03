@@ -1,11 +1,9 @@
 # C-SNIPPETS ![version](https://img.shields.io/npm/v/c-snippet?color=red&style=flat-square)
----
----
+--- 
 * ### [English Documentation](#index)
 * ### [Documentacion en Español](#indice)
 * ### [Contributions](#contributions)
----
----
+--- 
 ## Index
 
 - [C-SNIPPETS ](#c-snippets-)
