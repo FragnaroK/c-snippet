@@ -11,7 +11,7 @@
     "test": "jest --config jest.config.json",
     "format": "prettier --write \"src/**/*.ts\" \"src/**/*.js\"",
     "lint": "tslint -p tsconfig.json",
-    "repo:commit": "git add . && git commit"
+    "repo:commit": "git add . && git commit && git push origin"
   },
   "author": "FragnaroK",
   "license": "MIT",

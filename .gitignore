@@ -132,3 +132,7 @@ dist
 # ignore allure report
 /allure-report
 /allure-results
+
+
+# Others
+/target
