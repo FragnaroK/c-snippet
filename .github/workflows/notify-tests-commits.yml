@@ -37,16 +37,16 @@ jobs:
       if: steps.tests.outcome == 'success' 
       uses: fjogeleit/http-request-action@v1
       with:
-        url: 'https://maker.ifttt.com/trigger/ga_notify/json/with/key/D7aCXeY6FGCZlzNWowwAt'
+        url: 'https://maker.ifttt.com/trigger/${{ secrets.NOTIFY }}/json/with/key/${{ secrets.IFTTT_KEY }}'
         method: 'POST'
         customHeaders: '{"Content-Type": "application/json"}'
-        data: '{"repoName": "c-snippet","status": "success","details": "Changes made! All tests went ok! 😄","repoLink": "https://github.com/FragnaroK/c-snippet"}'
+        data: '{"repoName": "c-snippet","status": "success","details": "${{ vars.TEST_OK }}","repoLink": "https://github.com/FragnaroK/c-snippet"}'
       
     - name: Notify test failure
       if: steps.tests.outcome != 'success' 
       uses: fjogeleit/http-request-action@v1
       with:
-        url: 'https://maker.ifttt.com/trigger/ga_notify/json/with/key/D7aCXeY6FGCZlzNWowwAt'
+        url: 'https://maker.ifttt.com/trigger/${{ secrets.NOTIFY }}/json/with/key/${{ secrets.IFTTT_KEY }}'
         method: 'POST'
         customHeaders: '{"Content-Type": "application/json"}'
-        data: '{"repoName": "c-snippet","status": "Error","details": "Changes made but something is not working ok 😟","repoLink": "https://github.com/FragnaroK/c-snippet"}'
+        data: '{"repoName": "c-snippet","status": "Error","details": "${{ vars.TEST_ER }}","repoLink": "https://github.com/FragnaroK/c-snippet"}'
