@@ -1,7 +1,6 @@
 {
     "reporters": [
-        "default",
-        "jest-allure"
+        "default"
     ],
     "transform": {
         "^.+\\.(t|j)sx?$": "ts-jest"
@@ -10,7 +9,6 @@
         "**/__tests__/**/*.ts?(x)",
         "**/?(*.)+(spec|test).ts?(x)"
     ],
-    "testRunner": "jest-jasmine2",
     "moduleFileExtensions": [
         "ts",
         "tsx",
@@ -27,8 +25,5 @@
         "^@root/(.*)$": "<rootDir>/src/$1",
         "^@interfaces/(.*)$": "<rootDir>/src/types/$1",
         "^@utils/(.*)$": "<rootDir>/src/utils/$1"
-    },
-    "setupFilesAfterEnv": [
-        "jest-allure/dist/setup"
-    ]
+    }
 }

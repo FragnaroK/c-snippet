@@ -1,10 +1,9 @@
 import Utils from "../../utils/utils";
 import { ParsedSnippet } from "../../types/types";
-declare const reporter: any;
 
 
 const {
-    CSON
+    ATOM
 } = Utils;
 
 // Collection of snippets to test
@@ -72,34 +71,19 @@ const RawSnippets = [
       """
 `
 ];
-
-beforeEach(() => {
-  reporter
-  .epic('Parsers - Atom Snippets')
-  .feature('Parse snippets from Atom')
-  .story('')
-  .description(expect.getState().currentTestName);
-  });
-
-describe('CSON.parseString', () => {
+ 
+describe('ATOM.parseString', () => {
     it('should parse a CSON string into a ParsedSnippet array', async () => {
-        await reporter.startStep('Parse CSON string into ParsedSnippet array');
-        const parsedSnippets: ParsedSnippet[] = CSON.parseString(RawSnippets[0]);
-        await reporter.endStep();
+        const parsedSnippets: ParsedSnippet[] = ATOM.parseString(RawSnippets[0]);
 
-        await reporter.startStep('Expect parsedSnippets to be an array');
         expect(parsedSnippets).toHaveLength(1);
-        await reporter.endStep();
 
-        await reporter.startStep('Expect parsedSnippets to have properties: name, description, prefix, body, scope');
         expect(parsedSnippets[0]).toHaveProperty('name');
         expect(parsedSnippets[0]).toHaveProperty('description');
         expect(parsedSnippets[0]).toHaveProperty('prefix');
         expect(parsedSnippets[0]).toHaveProperty('body');
         expect(parsedSnippets[0]).toHaveProperty('scope');
-        await reporter.endStep();
 
-        await reporter.startStep('Expect parsedSnippets to match object and types: name, description, prefix, body, scope');
         expect(parsedSnippets[0]).toMatchObject({
             name: expect.any(String),
             description: expect.any(String),
@@ -107,17 +91,14 @@ describe('CSON.parseString', () => {
             body: expect.any(Array),
             scope: expect.any(String)
         });
-        await reporter.endStep();
 
-        await reporter.startStep('Expect parsedSnippets to be properly parsed');
         expect(parsedSnippets[0]).toEqual(Snippet[0]);
-        await reporter.endStep();
     });
 });
 
-describe('CSON.parseString (multiple sources)', () => {
+describe('ATOM.parseString (multiple sources)', () => {
     it('should parse a CSON string with multiple sources into a ParsedSnippet array', () => {
-        const parsedSnippets: ParsedSnippet[] = CSON.parseString(RawSnippets[1]);
+        const parsedSnippets: ParsedSnippet[] = ATOM.parseString(RawSnippets[1]);
 
         expect(parsedSnippets).toHaveLength(2);
 
@@ -175,9 +156,9 @@ describe('CSON.parseString (multiple sources)', () => {
     });
 });
 
-describe('CSON.stringifySnippet', () => {
+describe('ATOM.stringifySnippet', () => {
     it('should stringify a ParsedSnippet into a CSON string', () => {
-        const csonString: string = CSON.stringifySnippet(Snippet);
+        const csonString: string = ATOM.stringifySnippet(Snippet);
 
         expect(csonString).toEqual(`'*':
   'For Loop':

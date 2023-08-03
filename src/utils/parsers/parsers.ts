@@ -1,10 +1,12 @@
-import CSON from './cson';
-import CSN from './csn';
+import ATOM from './atom';
+import DREAMWEAVER from './dreamweaver';
+import VSCODE from './vscode';
 
 
 const Parsers = {
-    CSON,
-    CSN
+    ATOM,
+    DREAMWEAVER,
+    VSCODE
 }
 
 export default Parsers;

@@ -1,9 +1,8 @@
 import Utils from "../../utils/utils";
 import { ParsedSnippet } from "../../types/types";
-declare const reporter: any;
 
 const {
-    CSN
+    DREAMWEAVER
 } = Utils;
 
 const RawSnippets = [
@@ -94,56 +93,47 @@ function trimArray(array: string[]): string[] {
 
 describe('Parse CSN Snippet', () => {
     it('should parse a CSN snippet', async () => {
-        await reporter.startStep('Parse CSN snippet'); 
-        const parsedSnippet = CSN.parse(RawSnippets[0]);
+        const parsedSnippet = DREAMWEAVER.parse(RawSnippets[0]);
         expect(parsedSnippet).toEqual(Snippet[0]);
-        await reporter.endStep();
     });
 
     it('should parse multiple CSN snippets', async () => {
-        await reporter.startStep('Parse multiple CSN snippets');
         const parsedSnippets: ParsedSnippet[] = [];
 
         RawSnippets.forEach((rawSnippet) => {
-            const parsedSnippet = CSN.parse(rawSnippet);
+            const parsedSnippet = DREAMWEAVER.parse(rawSnippet);
             parsedSnippets.push(parsedSnippet);
         });
 
         expect(parsedSnippets).toEqual(Snippet);
-        await reporter.endStep();
     });
 });
 
-describe('CSN.stringify', () => {
+describe('DREAMWEAVER.stringify', () => {
     it('should stringify a ParsedSnippet array into a CSN string', async () => {
-        await reporter.startStep('Stringify ParsedSnippet array into CSN string');
-        const stringifiedSnippet = CSN.stringify(Snippet[0]);
+        const stringifiedSnippet = DREAMWEAVER.stringify(Snippet[0]);
         expect(trimArray(stringifiedSnippet.split('\n'))).toEqual(trimArray(RawSnippets[0].split('\n')));
-        await reporter.endStep();
     });
 
     it('should stringify multiple ParsedSnippet array into a CSN string', async () => {
-        await reporter.startStep('Stringify multiple ParsedSnippet array into CSN string');
         const stringifiedSnippets: string[] = [];
 
         Snippet.forEach((snippet) => {
-            const stringifiedSnippet = CSN.stringify(snippet);
+            const stringifiedSnippet = DREAMWEAVER.stringify(snippet);
             stringifiedSnippets.push(stringifiedSnippet);
         });
 
         expect(trimArray(stringifiedSnippets[0].split('\n'))).toEqual(trimArray(RawSnippets[0].split('\n')));
         expect(trimArray(stringifiedSnippets[1].split('\n'))).toEqual(trimArray(RawSnippets[1].split('\n')));
         expect(trimArray(stringifiedSnippets[2].split('\n'))).toEqual(trimArray(RawSnippets[2].split('\n')));
-        await reporter.endStep();
     });
     
 });
 
-// describe('CSN.parseFile', () => {
+// describe('DREAMWEAVER.parseFile', () => {
 //     it('should parse a CSN file into a ParsedSnippet array', async () => {
-//         await reporter.startStep('Parse CSN file into ParsedSnippet array');
-//         const parsedSnippets: ParsedSnippet[] = await CSN.parseFile('./src/__tests__/dreamweaver/snippets.csn');
+//         const parsedSnippets: ParsedSnippet[] = await DREAMWEAVER.parseFile('./src/__tests__/dreamweaver/snippets.csn');
 //         expect(parsedSnippets).toEqual(Snippet);
-//         await reporter.endStep();
+//      
 //     });
 // });

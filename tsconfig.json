@@ -12,6 +12,11 @@
 			"@utils/*": ["utils/*"],
 		},
 		"types": ["@types/jest", "@types/node"],
+		"pretty": true,
+		"esModuleInterop": true,
+		"forceConsistentCasingInFileNames": true,
+		"resolveJsonModule": true,
+		"alwaysStrict": true
 	},
 	"include": ["src"],
 	

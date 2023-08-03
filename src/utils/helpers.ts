@@ -1,4 +1,4 @@
-import * as htmlparser2 from 'htmlparser2';
+import { Parser } from 'htmlparser2';
 
 function addKeysToObject(data: Array<any>, target: any): any {
     data.forEach((item) => {
@@ -22,9 +22,9 @@ function prettifyHTML(html: string): string {
     let output = '';
     let indentLevel = 1;
 
-    const parser = new htmlparser2.Parser({
-        onopentag(name, attribs) { 
-            indentLevel++; 
+    const parser = new Parser({
+        onopentag(name, attribs) {
+            indentLevel++;
 
             output += `${'\t'.repeat(indentLevel)}<${name}`;
             for (const key in attribs) {
@@ -32,16 +32,16 @@ function prettifyHTML(html: string): string {
             }
 
             if (name === 'br') {
-                output += '\n'; 
+                output += '\n';
             } else if (name === 'pre') {
                 indentLevel = 0;
             } else if (name === 'code') {
                 indentLevel = 0;
-            } else if (name === 'p') { 
-                output += '>'; 
+            } else if (name === 'p') {
+                output += '>';
             } else {
                 output += '>\n';
-            } 
+            }
 
         },
         ontext(text) {
