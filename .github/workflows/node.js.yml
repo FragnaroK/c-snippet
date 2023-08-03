@@ -1,0 +1,50 @@
+# This workflow will do a clean installation of node dependencies, cache/restore them, build the source code and run tests across different versions of node
+# For more information see: https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-nodejs
+
+name: Build on tests success
+
+on:
+  release:
+    types: [released]
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        node-version: [14.x, 16.x, 18.x, 20.x]
+        # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
+
+    steps:
+    - uses: actions/checkout@v3
+    - name: Use Node.js ${{ matrix.node-version }}
+      uses: actions/setup-node@v3
+      with:
+        node-version: ${{ matrix.node-version }}
+        cache: 'npm'
+        
+    - name: Clean install of dependencies
+    - run: npm ci
+    
+    - name: Run tests
+      id: tests
+      run: npm test
+
+    - name: Build on test success
+      if: steps.tests.outcome == 'success'
+      run: npm run build --if-present
+      
+    - name: Handle test failure
+      if: steps.tests.outcome != 'success'
+      run: echo "Tests failed, skipping build"
+      
+    - name: Notify test failure
+      if: steps.tests.outcome != 'success' 
+      uses: fjogeleit/http-request-action@v1
+      with:
+        url: 'https://maker.ifttt.com/trigger/ga_notify/json/with/key/D7aCXeY6FGCZlzNWowwAt'
+        method: 'POST'
+        customHeaders: '{"Content-Type": "application/json"}'
+        data: '{"repoName": "c-snippet","status": "Error","details": "Tests failed during release - Build skipped 😟","repoLink": "https://github.com/FragnaroK/c-snippet"}'
