@@ -7,8 +7,8 @@
     "lib/**/*"
   ],
   "scripts": {
-    "build:dev": "webpack --config webpack.config.js --mode development",
-    "build:prod": "webpack --config webpack.config.js --mode production",
+    "build:dev": "cls && webpack --config webpack.config.js --mode development",
+    "build:prod": "cls && webpack --config webpack.config.js --mode production",
     "build:tsc": "tsc",
     "test": "jest --config jest.config.js",
     "format": "prettier --write \"src/**/*.ts\" \"src/**/*.js\"",
@@ -31,6 +31,8 @@
     "jest-ado-reporter": "^0.0.3",
     "jest-simple-dot-reporter": "^1.0.5",
     "prettier": "^3.0.0",
+    "size-plugin": "^3.0.0",
+    "speed-measure-webpack-plugin": "^1.5.0",
     "terser-webpack-plugin": "^5.3.9",
     "ts-jest": "^29.1.1",
     "ts-loader": "^9.4.4",
@@ -50,6 +52,7 @@
     "module-alias": "^2.2.3",
     "path-browserify": "^1.0.1",
     "prompt-sync": "^4.2.0",
+    "webpack-sources": "^3.2.3",
     "xml-parse": "^0.4.0",
     "xml2js": "^0.6.2",
     "yargs": "^17.7.2"
