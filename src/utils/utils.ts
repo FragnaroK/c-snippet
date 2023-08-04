@@ -1,9 +1,9 @@
 import Parsers from "./parsers/parsers";
+import Helpers from "./helpers";
 
-
-
-const utils = {
+const Utils = {
+    ...Helpers,
     ...Parsers
 }
- 
-export default utils; 
+
+export default Utils; 

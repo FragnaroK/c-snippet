@@ -45,14 +45,14 @@ const RawSnippets = `{
 	}
 }`;
 
-describe('Parse VS Code Snippets', () => {
+describe('VSCODE.parse', () => {
     it('should parse a VS Code snippet', () => {
         const parsedSnippet = VSCODE.parse(RawSnippets);
         expect(parsedSnippet).toEqual(Snippets);
     });
 });
 
-describe('Stringify VS Code Snippets', () => {
+describe('VSCODE.stringify', () => {
     it('should stringify a VS Code snippet', () => {
         const stringifiedSnippet = VSCODE.stringify(Snippets);
         expect(stringifiedSnippet).toEqual(JSON.stringify(JSON.parse(RawSnippets), null, 2));

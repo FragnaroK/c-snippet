@@ -1,5 +1,21 @@
 import { Parser } from 'htmlparser2';
 
+/**
+ *  Adds keys from an array of objects to a target object.
+ * @param data - An array of objects.
+ * @param target - The target object.
+ * @returns The target object with the keys added.
+ * @example
+ * const data = [
+ *    { name: 'John', age: 21 },
+ *   { name: 'Jane', age: 22 },
+ * ];
+ * const target = { name: '', age: '' };
+ * const result = addKeysToObject(data, target);
+ * console.log(result);
+ * // { name: { John: '', Jane: '' }, age: { 21: '', 22: '' } }
+ * 
+ */
 function addKeysToObject(data: Array<any>, target: any): any {
     data.forEach((item) => {
         for (const key in item) {
@@ -14,10 +30,37 @@ function addKeysToObject(data: Array<any>, target: any): any {
     return target;
 }
 
+/**
+ * Trims an array of strings.
+ * @param array - An array of strings.
+ * @returns An array of trimmed strings.
+ * @example
+ * const array = ['  Hello  ', '  World  '];
+ * const result = trimArray(array);
+ * console.log(result);
+ * // ['Hello', 'World']
+ * 
+ */
 function trimArray(array: Array<string>): Array<string> {
     return array.map((line) => line.trim()).filter((item) => item !== '');
 }
 
+/**
+ * Prettifies an HTML string.
+ * @param html - An HTML string.
+ * @returns A prettified HTML string.
+ * @example
+ * const html = '<p>Hello</p><p>World</p>';
+ * const result = prettifyHTML(html);
+ * console.log(result);
+ * // <p>
+ * //     Hello
+ * // </p>
+ * // <p>
+ * //     World
+ * // </p>
+ * 
+ */
 function prettifyHTML(html: string): string {
     let output = '';
     let indentLevel = 1;
@@ -73,6 +116,12 @@ function prettifyHTML(html: string): string {
 
 
 export {
+    addKeysToObject,
+    trimArray,
+    prettifyHTML
+};
+
+export default {
     addKeysToObject,
     trimArray,
     prettifyHTML

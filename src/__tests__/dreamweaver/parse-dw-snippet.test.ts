@@ -91,7 +91,7 @@ function trimArray(array: string[]): string[] {
     return trimmedArray;
 }
 
-describe('Parse CSN Snippet', () => {
+describe('DREAMWEAVER.parse', () => {
     it('should parse a CSN snippet', async () => {
         const parsedSnippet = DREAMWEAVER.parse(RawSnippets[0]);
         expect(parsedSnippet).toEqual(Snippet[0]);

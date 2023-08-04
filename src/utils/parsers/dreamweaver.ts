@@ -3,7 +3,16 @@ import { readFileSync } from 'fs';
 import { DreamweaverSnippet, DreamweaverSnippetContent, ParsedSnippet } from '@interfaces';
 import { prettifyHTML, trimArray } from '../helpers';
 
+/**
+ * Represents a utility class for working with Dreamweaver snippets.
+ */
 class Dreamweaver {
+    /**
+     * Parses a Dreamweaver snippet XML string and returns a parsed snippet object.
+     * @param snippet - The Dreamweaver snippet XML string.
+     * @returns A parsed snippet object.
+     * @throws {Error} If there is an error parsing the Dreamweaver snippet XML.
+     */
     static parse(snippet: string): ParsedSnippet {
         const parser = new Parser();
         const parsedSnippet: ParsedSnippet = { body: [], scope: '' };
@@ -34,11 +43,22 @@ class Dreamweaver {
         return parsedSnippet;
     }
 
+    /**
+     * Parses a Dreamweaver snippet XML file and returns a parsed snippet object.
+     * @param filePath - The path to the Dreamweaver snippet XML file.
+     * @returns A parsed snippet object.
+     * @throws {Error} If there is an error reading the file or parsing the Dreamweaver snippet XML.
+     */
     static parseFile(filePath: string): ParsedSnippet {
         const content = readFileSync(filePath, 'utf-8');
         return Dreamweaver.parse(content);
     }
 
+    /**
+     * Converts a parsed snippet object into a Dreamweaver snippet XML string.
+     * @param snippet - A parsed snippet object.
+     * @returns A Dreamweaver snippet XML string.
+     */
     static stringify(snippet: ParsedSnippet): string {
         const { name, description, prefix, body } = snippet;
         const insertTextElements = `    <insertText location="beforeSelection"> 

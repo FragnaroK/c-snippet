@@ -22,13 +22,21 @@ export interface SublimeSnippet {
     scope?: string;
 }
 
+export interface RawAtomSnippets {
+    [key: string]: {
+        [key: string]: {
+            prefix?: string;
+            body: string;
+        };
+    };
+}
+
 export interface AtomSnippet {
     snippet: {
         [key: string]: {
             prefix?: string;
             body: string;
         };
-       
     }
     scope?: string;
 }
