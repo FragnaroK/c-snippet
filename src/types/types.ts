@@ -14,6 +14,20 @@ export interface VSCodeSnippet {
     scope?: string;
 }
 
+export interface RawSublimeSnippets {
+    snippet: { 
+        content: {
+            _: string;
+            $: {
+                [key: string]: string;
+            };
+        };
+        tabTrigger?: string;
+        description?: string;
+        scope?: string;
+    }
+}
+
 export interface SublimeSnippet {
     name?: string;
     description?: string;

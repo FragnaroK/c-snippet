@@ -41,8 +41,11 @@ function addKeysToObject(data: Array<any>, target: any): any {
  * // ['Hello', 'World']
  * 
  */
-function trimArray(array: Array<string>): Array<string> {
-    return array.map((line) => line.trim()).filter((item) => item !== '');
+function trimArray(array: Array<string>, deep: boolean = false): Array<string> {
+    if (!deep) return array.map((line) => line.trim()).filter((item) => item !== '');
+    return array.map((line) => line.trim()).filter((item) => item !== '').map((line) => {
+        return line.split('').filter((char) => char !== '\t').join('');
+    });
 }
 
 /**
