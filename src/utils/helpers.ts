@@ -1,5 +1,21 @@
 import { Parser } from 'htmlparser2';
 
+
+const parser_variables = {
+    divider: '#{DIVIDER}',
+    tabstop: '#{TABSTOP}',
+    placeholder: '#{PLACEHOLDER}',
+    escape: '#{ESCAPE}',
+    comment: '#{COMMENT}',
+    variable: '#{VARIABLE}',
+    null: '#{NULL}',
+    undefined: '#{UNDEFINED}',
+    snippetName: {
+        start: '#{NAME:',
+        end: '}'
+    },
+}
+
 /**
  *  Adds keys from an array of objects to a target object.
  * @param data - An array of objects.
@@ -121,11 +137,13 @@ function prettifyHTML(html: string): string {
 export {
     addKeysToObject,
     trimArray,
-    prettifyHTML
+    prettifyHTML,
+    parser_variables
 };
 
 export default {
     addKeysToObject,
     trimArray,
-    prettifyHTML
+    prettifyHTML,
+    parser_variables
 };

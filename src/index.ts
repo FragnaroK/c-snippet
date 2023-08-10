@@ -23,7 +23,7 @@ const questions = [
             { name: 'Atom', value: 'atom', description: "WARN: Snippets scope are going to be converted to global" }
         ]
     }
-];
+]; 
 
 const main = async () => {
     console.log(textSync('C-Snippet', { horizontalLayout: 'full', font: 'ANSI Shadow' }), '\n');

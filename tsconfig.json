@@ -6,11 +6,6 @@
 		"baseUrl": ".",
 		"outDir": "./lib",
 		"strict": true,
-		"paths": {
-			"@root/*": ["src/*"],
-			"@interfaces": ["src/types/types.ts"],
-			"@utils/*": ["utils/*"],
-		},
 		"types": ["@types/jest", "@types/node"],
 		"pretty": true,
 		"esModuleInterop": true,

@@ -1,27 +1,59 @@
-import { Parser } from 'xml2js';
+import { Parser, Builder } from 'xml2js';
 import { readFileSync } from 'fs';
-import { DreamweaverSnippet, DreamweaverSnippetContent, ParsedSnippet } from '@interfaces';
+import { DreamweaverSnippet, DreamweaverSnippetContent, ParsedSnippet } from '../../types/types';
 import { prettifyHTML, trimArray } from '../helpers';
 
 /**
  * Represents a utility class for working with Dreamweaver snippets.
  */
 class Dreamweaver {
+
+
+    /**
+     * Checks if the given file path or string is an Dreamweaver snippet file.
+     * @param filePathOrString - The file path or string to check.
+     * @returns `true` if the given file path or string is a Dreamweaver snippet file, otherwise `false`.
+     * @throws {Error} If there is an error reading the file or parsing the CSN.
+     * 
+     */
+    public static async isSnippet(filePathOrString: string): Promise<boolean> {
+
+        const isCSN = await Promise.resolve(filePathOrString.endsWith('.csn'));
+        const isCorrectFormat = await Dreamweaver.parse(filePathOrString).then((snippet) => snippet.prefix !== undefined && snippet.body !== undefined);
+
+        return await Promise.all([isCSN, isCorrectFormat]).then((values) => values.some((value) => value === true)); 
+    }
+
+    /**
+     * Parses a Dreamweaver snippet XML file and returns a parsed snippet object.
+     * @param filePath - The path to the Dreamweaver snippet XML file.
+     * @returns A parsed snippet object.
+     * @throws {Error} If there is an error reading the file or parsing the Dreamweaver snippet XML.
+     */
+    public static async parseFile(filePath: string): Promise<ParsedSnippet> {
+        try {
+            const data = readFileSync(filePath, 'utf-8');
+            return Dreamweaver.parse(data);
+        } catch (err: any) {
+            throw new Error('Failed to parse Dreamweaver snippet XML: ' + err.message);
+        }
+    }
+
     /**
      * Parses a Dreamweaver snippet XML string and returns a parsed snippet object.
      * @param snippet - The Dreamweaver snippet XML string.
      * @returns A parsed snippet object.
      * @throws {Error} If there is an error parsing the Dreamweaver snippet XML.
      */
-    static parse(snippet: string): ParsedSnippet {
-        const parser = new Parser();
-        const parsedSnippet: ParsedSnippet = { body: [], scope: '' };
-
+    public static async parse(snippet: string): Promise<ParsedSnippet> {
         try {
+            const parser = new Parser();
+            const parsedSnippet: ParsedSnippet = { body: [], scope: '' };
+
             parser.parseString(snippet, (err, res) => {
                 const result: DreamweaverSnippet = res;
                 const snippetElement: DreamweaverSnippetContent = result.snippet;
-
+                
                 parsedSnippet.name = snippetElement.$.name;
                 parsedSnippet.description = snippetElement.$.description;
                 parsedSnippet.prefix = snippetElement.$.preview;
@@ -36,44 +68,62 @@ class Dreamweaver {
                 }
             });
 
+            return parsedSnippet;
+
         } catch (err: any) {
             throw new Error('Failed to parse Dreamweaver snippet XML: ' + err.message);
         }
-
-        return parsedSnippet;
     }
 
-    /**
-     * Parses a Dreamweaver snippet XML file and returns a parsed snippet object.
-     * @param filePath - The path to the Dreamweaver snippet XML file.
-     * @returns A parsed snippet object.
-     * @throws {Error} If there is an error reading the file or parsing the Dreamweaver snippet XML.
-     */
-    static parseFile(filePath: string): ParsedSnippet {
-        const content = readFileSync(filePath, 'utf-8');
-        return Dreamweaver.parse(content);
-    }
 
     /**
      * Converts a parsed snippet object into a Dreamweaver snippet XML string.
      * @param snippet - A parsed snippet object.
      * @returns A Dreamweaver snippet XML string.
      */
-    static stringify(snippet: ParsedSnippet): string {
-        const { name, description, prefix, body } = snippet;
-        const insertTextElements = `    <insertText location="beforeSelection"> 
-            <![CDATA[ 
-${prettifyHTML(body.join(''))}
-            ]]>
-        </insertText>
-        <insertText location="afterSelection">
-            <![CDATA[]]>
-        </insertText>`;
+    public static async stringify(snippet: ParsedSnippet): Promise<string> {
+        try {
+            const builder = new Builder({
+                renderOpts: { 'pretty': true, 'newline': '\n', 'indent': '' },
+                cdata: true,
+                xmldec: { 'version': '1.0', 'encoding': 'utf-8' },
 
-        return `<?xml version="1.0" encoding="utf-8"?>
-    <snippet name="${name}" description="${description}" preview="${prefix}" type="block">
-    ${insertTextElements}
-    </snippet>`;
+            });
+
+            const { name, description, prefix, body } = snippet;
+
+            const insertTextElements: DreamweaverSnippet = {
+                snippet: {
+                    $: {
+                        name,
+                        description,
+                        preview: prefix,
+                        type: 'block'
+                    },
+                    insertText: [
+                        {
+                            $: {
+                                location: 'beforeSelection'
+                            },
+                            _: prettifyHTML(body.join(''))
+                        },
+                        {
+                            $: {
+                                location: 'afterSelection'
+                            },
+                            _: '#{NULL}'
+                        }
+                    ]
+                }
+            };
+
+            return builder.buildObject(insertTextElements)
+                .replace(/#{\s*NULL\s*}/g, "")
+                .replace("<![CDATA[", "\n<![CDATA[\n")
+                .replace("]]>", "\n]]>\n");
+        } catch (err: any) {
+            throw new Error('Failed to convert parsed snippet to Dreamweaver snippet XML: ' + err.message);
+        }
     }
 }
 

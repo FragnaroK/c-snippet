@@ -17,11 +17,6 @@
   },
   "author": "FragnaroK",
   "license": "MIT",
-  "_moduleAliases": {
-    "@root": "/src",
-    "@interfaces": "/src/types/types.ts",
-    "@utils": "/src/utils"
-  },
   "devDependencies": {
     "@types/figlet": "^1.5.6",
     "@types/jest": "^29.5.3",
@@ -43,7 +38,6 @@
     "eslint": "^8.46.0",
     "figlet": "^1.6.0",
     "htmlparser2": "^9.0.0",
-    "module-alias": "^2.2.3",
     "xml2js": "^0.6.2"
   }
 }

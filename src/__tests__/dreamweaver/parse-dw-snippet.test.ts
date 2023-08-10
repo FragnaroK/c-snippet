@@ -15,9 +15,7 @@ const RawSnippets = [
                 </div>
             ]]>
         </insertText>
-        <insertText location="afterSelection">
-            <![CDATA[]]>
-        </insertText>
+        <insertText location="afterSelection"></insertText>
     </snippet>
     `,
     `<?xml version="1.0" encoding="utf-8"?>
@@ -29,9 +27,7 @@ const RawSnippets = [
                 </script>
             ]]>
         </insertText>
-        <insertText location="afterSelection">
-            <![CDATA[]]>
-        </insertText>
+        <insertText location="afterSelection"></insertText>
     </snippet>
     `,
     `<?xml version="1.0" encoding="utf-8"?>
@@ -43,9 +39,7 @@ const RawSnippets = [
                 </button>
             ]]>
         </insertText>
-        <insertText location="afterSelection">
-            <![CDATA[]]>
-        </insertText>
+        <insertText location="afterSelection"></insertText>
     </snippet>
     `,
 ];
@@ -93,17 +87,17 @@ function trimArray(array: string[]): string[] {
 
 describe('DREAMWEAVER.parse', () => {
     it('should parse a CSN snippet', async () => {
-        const parsedSnippet = DREAMWEAVER.parse(RawSnippets[0]);
+        const parsedSnippet = await DREAMWEAVER.parse(RawSnippets[0]);
         expect(parsedSnippet).toEqual(Snippet[0]);
     });
 
     it('should parse multiple CSN snippets', async () => {
         const parsedSnippets: ParsedSnippet[] = [];
 
-        RawSnippets.forEach((rawSnippet) => {
-            const parsedSnippet = DREAMWEAVER.parse(rawSnippet);
+        for (const rawSnippet of RawSnippets) {
+            const parsedSnippet = await DREAMWEAVER.parse(rawSnippet);
             parsedSnippets.push(parsedSnippet);
-        });
+        } 
 
         expect(parsedSnippets).toEqual(Snippet);
     });
@@ -111,17 +105,18 @@ describe('DREAMWEAVER.parse', () => {
 
 describe('DREAMWEAVER.stringify', () => {
     it('should stringify a ParsedSnippet array into a CSN string', async () => {
-        const stringifiedSnippet = DREAMWEAVER.stringify(Snippet[0]);
+        const stringifiedSnippet = await DREAMWEAVER.stringify(Snippet[0]);
         expect(trimArray(stringifiedSnippet.split('\n'))).toEqual(trimArray(RawSnippets[0].split('\n')));
     });
 
     it('should stringify multiple ParsedSnippet array into a CSN string', async () => {
         const stringifiedSnippets: string[] = [];
 
-        Snippet.forEach((snippet) => {
-            const stringifiedSnippet = DREAMWEAVER.stringify(snippet);
+        
+        for (const snippet of Snippet) {
+            const stringifiedSnippet = await DREAMWEAVER.stringify(snippet);
             stringifiedSnippets.push(stringifiedSnippet);
-        });
+        }
 
         expect(trimArray(stringifiedSnippets[0].split('\n'))).toEqual(trimArray(RawSnippets[0].split('\n')));
         expect(trimArray(stringifiedSnippets[1].split('\n'))).toEqual(trimArray(RawSnippets[1].split('\n')));
