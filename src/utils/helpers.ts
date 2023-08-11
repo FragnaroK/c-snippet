@@ -1,6 +1,5 @@
 import { Parser } from 'htmlparser2';
 
-
 const parser_variables = {
     divider: '#{DIVIDER}',
     tabstop: '#{TABSTOP}',

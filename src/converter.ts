@@ -2,41 +2,57 @@ import Utils from './utils/utils';
 import { ConverterInterface, ParsedSnippet, ParserType } from './types/types';
 import { parser_variables } from './utils/helpers';
 
-// Destructure utility functions and types from Utils module
-const { ATOM, DREAMWEAVER, SUBLIME, VSCODE } = Utils;
-
 /**
  * Class representing a converter for snippets.
  */
 class Converter implements ConverterInterface {
-    /** The source of the parser. */
+    /**
+     * The source of the parser.
+     * @type {ParserType | undefined}
+     */
     source?: ParserType;
-    /** Available parsers for different snippet formats. */
-    parsers: Record<string, typeof VSCODE | typeof SUBLIME | typeof DREAMWEAVER | typeof ATOM>;
-    /** Snippets to be converted. */
+
+    /**
+     * The editor that the snippets will be converted to.
+     * @type {ParserType | undefined}
+     */
+    target?: ParserType;
+
+    /**
+     * Available parsers for different snippet formats.
+     * @type {Record<string, typeof VSCODE | typeof SUBLIME | typeof DREAMWEAVER | typeof ATOM>}
+     */
+    parsers: Record<string, typeof Utils.VSCODE | typeof Utils.SUBLIME | typeof Utils.DREAMWEAVER | typeof Utils.ATOM>;
+
+    /**
+     * Snippets to be converted.
+     * @type {string}
+     */
     snippets: string;
 
     /**
      * Create a converter instance.
      * @param {string} snippets - Snippets to be converted.
-     * @param {ParserType} source - Optional source type of the snippets.
+     * @param {ParserType} [target] - Optional target type of the snippets.
+     * @param {ParserType} [source] - Optional source type of the snippets.
      */
-    constructor(snippets: string, source?: ParserType) {
+    constructor(snippets: string, target?: ParserType, source?: ParserType) {
         this.source = source;
+        this.target = target;
         this.snippets = snippets;
         this.parsers = {
-            vscode: VSCODE,
-            sublime: SUBLIME,
-            dreamweaver: DREAMWEAVER,
-            atom: ATOM,
+            vscode: Utils.VSCODE,
+            sublime: Utils.SUBLIME,
+            dreamweaver: Utils.DREAMWEAVER,
+            atom: Utils.ATOM,
         };
     }
 
     /**
- * Get the name of the snippet.
- * @param {string} snippet - The snippet content.
- * @returns {string} The name of the snippet.
- */
+     * Get the name of the snippet.
+     * @param {string} snippet - The snippet content.
+     * @returns {string} The name of the snippet.
+     */
     private static getSnippetName(snippet: string): string {
         const { start, end } = parser_variables.snippetName;
         const startStr = snippet.indexOf(start);
@@ -56,10 +72,10 @@ class Converter implements ConverterInterface {
     }
 
     /**
- * Find the source parser for the snippets.
- * @returns {Promise<ParserType>} The source parser type.
- * @throws {Error} If no valid source parser is found.
- */
+     * Find the source parser for the snippets.
+     * @returns {Promise<ParserType>} The source parser type.
+     * @throws {Error} If no valid source parser is found.
+     */
     async findSource(): Promise<ParserType> {
         const promises = Object.keys(this.parsers).map(async (parser) => {
             return this.parsers[parser].isSnippet(this.snippets, "").catch(() => false);
@@ -76,26 +92,25 @@ class Converter implements ConverterInterface {
     }
 
     /**
- * Parse the snippets using the appropriate parser.
- * @param {ParserType} source - Optional source parser type.
- * @returns {Promise<ParsedSnippet[]>} The parsed snippets.
- * @throws {Error} If parsing fails or no source is found.
- */
+     * Parse the snippets using the appropriate parser.
+     * @param {ParserType} [source] - Optional source parser type.
+     * @returns {Promise<ParsedSnippet[]>} The parsed snippets.
+     * @throws {Error} If parsing fails or no source is found.
+     */
     async parse(source?: ParserType): Promise<ParsedSnippet[]> {
         if (!source) source = this.source;
         if (!source) throw new Error('No source found');
 
         const rawSnippets = this.snippets.includes(parser_variables.divider) ? this.snippets.split(parser_variables.divider) : [this.snippets];
 
-        if (source === 'vscode' || source === 'atom') {
+        if (['vscode', 'atom'].includes(source)) {
             return await this.parsers[source].parse(this.snippets, "") as ParsedSnippet[];
         }
 
-        if (source === 'sublime' || source === 'dreamweaver') {
-            const isSublime = source === 'sublime';
+        if (['sublime', 'dreamweaver'].includes(source)) {
             const parsePromises = rawSnippets.map(async (snip) => {
-                const name = isSublime ? Converter.getSnippetName(snip) : undefined;
-                return this.parsers[source ?? this.source!].parse(snip, name ?? "") as Promise<ParsedSnippet>;
+                const name = source === 'sublime' ? Converter.getSnippetName(snip) : undefined;
+                return this.parsers[source!].parse(snip, name ?? "") as Promise<ParsedSnippet>;
             });
             return Promise.all(parsePromises);
         }
@@ -104,13 +119,32 @@ class Converter implements ConverterInterface {
     }
 
     /**
- * Convert the parsed snippets.
- * @param {ParsedSnippet[]} snippet - The parsed snippets to be converted.
- * @returns {Promise<string>} The converted snippets.
- * @throws {Error} If the method is not implemented.
- */
-    async convert(snippet?: ParsedSnippet[]): Promise<string> {
-        throw new Error('Method not implemented.');
+     * Convert the parsed snippets.
+     * @param {ParsedSnippet[]} [snippet] - The parsed snippets to be converted.
+     * @param {ParserType} [to] - The target parser type.
+     * @returns {Promise<string>} The converted snippets.
+     * @throws {Error} If the method is not implemented.
+     */
+    async convert(snippet?: ParsedSnippet[], to?: ParserType): Promise<string> {
+        if (!snippet) snippet = await this.parse();
+        if (!to) to = this.target;
+        if (!to) throw new Error('No target found');
+
+        const convertPromises: Promise<string>[] = [];
+
+        if (['vscode', 'atom'].includes(to)) {
+            convertPromises.push(this.parsers[to].stringify(snippet as ParsedSnippet[] & ParsedSnippet));
+        }
+
+        if (['sublime', 'dreamweaver'].includes(to)) {
+            const stringified = snippet.map(async (snip) => {
+                return this.parsers[to!].stringify(snip as ParsedSnippet[] & ParsedSnippet);
+            });
+            convertPromises.push(...stringified);
+        }
+
+        const convertedSnippets = await Promise.all(convertPromises);
+        return convertedSnippets.join(parser_variables.divider);
     }
 }
 

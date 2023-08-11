@@ -6,7 +6,8 @@ name: Notify commits
 on:
   push:
     branches:
-      - 'main'
+      - '**'
+
 
 jobs:
   build:
