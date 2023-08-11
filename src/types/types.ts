@@ -93,3 +93,11 @@ export interface ConverterInterface {
     parse(source?: string): Promise<ParsedSnippet[]>;
     convert(snippet?: ParsedSnippet[]): Promise<string>;
 }
+
+export interface WriteOptions {
+    outdir?: string;
+    filename?: string;
+    overwrite?: boolean;
+    content: string;
+    [key: string]: any;
+}

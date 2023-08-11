@@ -134,196 +134,198 @@ const RawSublimeSnippets = [
     `,
 ];
 
-describe('Converter.findSource', () => {
-    it('should find the source of the snippets -> VSCode', async () => {
-        const converter = new Converter(RawVSCODESnippets);
-        const source = await converter.findSource();
-        expect(source).toMatch('vscode');
+describe('Converter Without Source Specified', () => {
+    describe('Converter.findSource', () => {
+        it('should find the source of the snippets -> VSCode', async () => {
+            const converter = new Converter(RawVSCODESnippets);
+            const source = await converter.findSource();
+            expect(source).toMatch('vscode');
+        });
+
+        it('should find the source of the snippets -> Atom', async () => {
+            const converter = new Converter(RawAtomSnippets[0]);
+            const source = await converter.findSource();
+            expect(source).toMatch('atom');
+        });
+
+        it('should find the source of the snippets -> Dreamweaver', async () => {
+            const converter = new Converter(RawDwSnippets[0]);
+            const source = await converter.findSource();
+            expect(source).toMatch('dreamweaver');
+        });
+
+        it('should find the source of the snippets -> Sublime', async () => {
+            const converter = new Converter(RawSublimeSnippets[0]);
+            const source = await converter.findSource();
+            expect(source).toMatch('sublime');
+        });
     });
 
-    it('should find the source of the snippets -> Atom', async () => {
-        const converter = new Converter(RawAtomSnippets[0]);
-        const source = await converter.findSource();
-        expect(source).toMatch('atom');
+    describe('Converter.init', () => {
+        it('should initialize the converter without source -> VSCode', async () => {
+            const converter = await new Converter(RawVSCODESnippets).init();
+            expect(converter.source).toMatch('vscode');
+        });
+
+        it('should initialize the converter without source -> Atom', async () => {
+            const converter = await new Converter(RawAtomSnippets[0]).init();
+            expect(converter.source).toMatch('atom');
+        });
+
+        it('should initialize the converter without source -> Dreamweaver', async () => {
+            const converter = await new Converter(RawDwSnippets[0]).init();
+            expect(converter.source).toMatch('dreamweaver');
+        });
+
+        it('should initialize the converter without source -> Sublime', async () => {
+            const converter = await new Converter(RawSublimeSnippets[0]).init();
+            expect(converter.source).toMatch('sublime');
+        });
     });
 
-    it('should find the source of the snippets -> Dreamweaver', async () => {
-        const converter = new Converter(RawDwSnippets[0]);
-        const source = await converter.findSource();
-        expect(source).toMatch('dreamweaver');
+
+    describe('Converter.parse', () => {
+        it('should parse the snippets -> VSCode', async () => {
+            const converter = await new Converter(RawVSCODESnippets).init();
+            const parsedSnippets = await converter.parse();
+            expect(parsedSnippets).toHaveLength(2);
+        });
+
+        it('should parse the snippets -> Atom', async () => {
+            const converter = await new Converter(RawAtomSnippets[0]).init();
+            const parsedSnippets = await converter.parse();
+            expect(parsedSnippets).toHaveLength(1);
+        });
+
+        it('should parse the snippets -> Dreamweaver', async () => {
+            const converter = await new Converter(RawDwSnippets[0]).init();
+            const parsedSnippets = await converter.parse();
+            expect(parsedSnippets).toHaveLength(1);
+        });
+
+        it('should parse the snippets -> Sublime', async () => {
+            const converter = await new Converter(RawSublimeSnippets[0]).init();
+            const parsedSnippets = await converter.parse();
+            expect(parsedSnippets).toHaveLength(1);
+        });
     });
 
-    it('should find the source of the snippets -> Sublime', async () => {
-        const converter = new Converter(RawSublimeSnippets[0]);
-        const source = await converter.findSource();
-        expect(source).toMatch('sublime');
-    });
-});
+    describe('Converter.parse (multiple)', () => {
+        it('should parse the snippets -> Atom', async () => {
+            const converter = await new Converter(RawAtomSnippets.join("\n")).init();
+            const parsedSnippets = await converter.parse();
+            expect(parsedSnippets).toHaveLength(2);
+        });
 
-describe('Converter.init', () => {
-    it('should initialize the converter without source -> VSCode', async () => {
-        const converter = await new Converter(RawVSCODESnippets).init();
-        expect(converter.source).toMatch('vscode');
-    });
+        it('should parse the snippets -> Sublime', async () => {
+            const converter = await new Converter(RawSublimeSnippets.join(parser_variables.divider)).init();
+            const parsedSnippets = await converter.parse();
+            expect(parsedSnippets).toHaveLength(RawSublimeSnippets.length);
+        });
 
-    it('should initialize the converter without source -> Atom', async () => {
-        const converter = await new Converter(RawAtomSnippets[0]).init();
-        expect(converter.source).toMatch('atom');
-    });
+        it('should parse the snippets -> Dreamweaver', async () => {
+            const converter = await new Converter(RawDwSnippets.join(parser_variables.divider)).init();
+            const parsedSnippets = await converter.parse();
+            expect(parsedSnippets).toHaveLength(RawDwSnippets.length);
+        });
 
-    it('should initialize the converter without source -> Dreamweaver', async () => {
-        const converter = await new Converter(RawDwSnippets[0]).init();
-        expect(converter.source).toMatch('dreamweaver');
-    });
-
-    it('should initialize the converter without source -> Sublime', async () => {
-        const converter = await new Converter(RawSublimeSnippets[0]).init();
-        expect(converter.source).toMatch('sublime');
-    });
-});
-
-
-describe('Converter.parse', () => {
-    it('should parse the snippets -> VSCode', async () => {
-        const converter = await new Converter(RawVSCODESnippets).init();
-        const parsedSnippets = await converter.parse();
-        expect(parsedSnippets).toHaveLength(2);
+        it('should parse the snippets -> VSCode', async () => {
+            const converter = await new Converter(RawVSCODESnippets).init();
+            const parsedSnippets = await converter.parse();
+            expect(parsedSnippets).toHaveLength(2);
+        });
     });
 
-    it('should parse the snippets -> Atom', async () => {
-        const converter = await new Converter(RawAtomSnippets[0]).init();
-        const parsedSnippets = await converter.parse();
-        expect(parsedSnippets).toHaveLength(1);
+
+    describe('Converter.convert', () => {
+        it('should convert the snippets -> VSCode to Atom', async () => {
+            const converter = await new Converter(RawVSCODESnippets, "atom").init();
+            const parsedSnippets = await converter.parse();
+            const convertedSnippets = await converter.convert(parsedSnippets);
+
+            expect(parsedSnippets).toHaveLength(2);
+            expect(convertedSnippets).toContain("*");
+            expect(convertedSnippets).toContain(parsedSnippets[0].prefix);
+            expect(convertedSnippets).toContain(parsedSnippets[1].prefix);
+        });
+
+        it('should convert the snippets -> Atom to Sublime', async () => {
+            const converter = await new Converter(RawAtomSnippets[0], "sublime").init();
+            const parsedSnippets = await converter.parse();
+            const convertedSnippets = await converter.convert(parsedSnippets);
+
+            expect(parsedSnippets).toHaveLength(1);
+            expect(convertedSnippets).toContain("<snippet>");
+            expect(convertedSnippets).toContain(parsedSnippets[0].prefix);
+            expect(convertedSnippets).toContain(parsedSnippets[0].description);
+        });
+
+        it('should convert the snippets -> Dreamweaver to VSCode', async () => {
+            const converter = await new Converter(RawDwSnippets[0], "vscode").init();
+            const parsedSnippets = await converter.parse();
+            const convertedSnippets = await converter.convert(parsedSnippets);
+
+            expect(parsedSnippets).toHaveLength(1);
+            expect(convertedSnippets).toContain(parsedSnippets[0].prefix);
+            expect(convertedSnippets).toContain(parsedSnippets[0].description);
+        });
+
+        it('should convert the snippets -> Sublime to Dreamweaver', async () => {
+            const converter = await new Converter(RawSublimeSnippets[0], "dreamweaver").init();
+            const parsedSnippets = await converter.parse();
+            const convertedSnippets = await converter.convert(parsedSnippets);
+
+            expect(parsedSnippets).toHaveLength(1);
+            expect(convertedSnippets).toContain(`<snippet name="${parsedSnippets[0].name}"`);
+            expect(convertedSnippets).toContain("afterSelection");
+            expect(convertedSnippets).toContain(parsedSnippets[0].prefix);
+            expect(convertedSnippets).toContain(parsedSnippets[0].description);
+        });
     });
 
-    it('should parse the snippets -> Dreamweaver', async () => {
-        const converter = await new Converter(RawDwSnippets[0]).init();
-        const parsedSnippets = await converter.parse();
-        expect(parsedSnippets).toHaveLength(1);
+    describe('Converter.convert (multiple)', () => {
+        it('should convert the snippets -> Atom to Sublime', async () => {
+            const converter = await new Converter(RawAtomSnippets.join("\n"), "sublime").init();
+            const parsedSnippets = await converter.parse();
+            const convertedSnippets = await converter.convert(parsedSnippets);
+
+            expect(parsedSnippets).toHaveLength(2);
+            expect(convertedSnippets).toContain("<snippet>");
+            expect(convertedSnippets).toContain(parsedSnippets[0].prefix);
+            expect(convertedSnippets).toContain(parsedSnippets[1].prefix);
+        });
+
+        it('should convert the snippets -> Sublime to Dreamweaver', async () => {
+            const converter = await new Converter(RawSublimeSnippets.join(parser_variables.divider), "dreamweaver").init();
+            const parsedSnippets = await converter.parse();
+            const convertedSnippets = await converter.convert(parsedSnippets);
+
+            expect(parsedSnippets).toHaveLength(RawSublimeSnippets.length);
+            expect(convertedSnippets).toContain(`<snippet name="${parsedSnippets[0].name}"`);
+            expect(convertedSnippets).toContain("afterSelection");
+            expect(convertedSnippets).toContain(parsedSnippets[0].prefix);
+            expect(convertedSnippets).toContain(parsedSnippets[0].description);
+        });
+
+        it('should convert the snippets -> Dreamweaver to VSCode', async () => {
+            const converter = await new Converter(RawDwSnippets.join(parser_variables.divider), "vscode").init();
+            const parsedSnippets = await converter.parse();
+            const convertedSnippets = await converter.convert(parsedSnippets);
+
+            expect(parsedSnippets).toHaveLength(RawDwSnippets.length);
+            expect(convertedSnippets).toContain(parsedSnippets[0].prefix);
+            expect(convertedSnippets).toContain(parsedSnippets[0].description);
+        });
+
+        it('should convert the snippets -> VSCode to Atom', async () => {
+            const converter = await new Converter(RawVSCODESnippets, "atom").init();
+            const parsedSnippets = await converter.parse();
+            const convertedSnippets = await converter.convert(parsedSnippets);
+
+            expect(parsedSnippets).toHaveLength(2);
+            expect(convertedSnippets).toContain("*");
+            expect(convertedSnippets).toContain(parsedSnippets[0].prefix);
+            expect(convertedSnippets).toContain(parsedSnippets[1].prefix);
+        });
     });
-
-    it('should parse the snippets -> Sublime', async () => {
-        const converter = await new Converter(RawSublimeSnippets[0]).init();
-        const parsedSnippets = await converter.parse();
-        expect(parsedSnippets).toHaveLength(1);
-    });
-});
-
-describe('Converter.parse (multiple)', () => {
-    it('should parse the snippets -> Atom', async () => {
-        const converter = await new Converter(RawAtomSnippets.join("\n")).init();
-        const parsedSnippets = await converter.parse();
-        expect(parsedSnippets).toHaveLength(2);
-    });
-
-    it('should parse the snippets -> Sublime', async () => {
-        const converter = await new Converter(RawSublimeSnippets.join(parser_variables.divider)).init();
-        const parsedSnippets = await converter.parse();
-        expect(parsedSnippets).toHaveLength(RawSublimeSnippets.length);
-    });
-
-    it('should parse the snippets -> Dreamweaver', async () => {
-        const converter = await new Converter(RawDwSnippets.join(parser_variables.divider)).init();
-        const parsedSnippets = await converter.parse();
-        expect(parsedSnippets).toHaveLength(RawDwSnippets.length);
-    });
-
-    it('should parse the snippets -> VSCode', async () => {
-        const converter = await new Converter(RawVSCODESnippets).init();
-        const parsedSnippets = await converter.parse();
-        expect(parsedSnippets).toHaveLength(2);
-    });
-});
-
-
-describe('Converter.convert', () => {
-    it('should convert the snippets -> VSCode to Atom', async () => {
-        const converter = await new Converter(RawVSCODESnippets, "atom").init();
-        const parsedSnippets = await converter.parse();
-        const convertedSnippets = await converter.convert(parsedSnippets);
-
-        expect(parsedSnippets).toHaveLength(2);
-        expect(convertedSnippets).toContain("*");
-        expect(convertedSnippets).toContain(parsedSnippets[0].prefix);
-        expect(convertedSnippets).toContain(parsedSnippets[1].prefix);
-    });
-
-    it('should convert the snippets -> Atom to Sublime', async () => {
-        const converter = await new Converter(RawAtomSnippets[0], "sublime").init();
-        const parsedSnippets = await converter.parse();
-        const convertedSnippets = await converter.convert(parsedSnippets);
-
-        expect(parsedSnippets).toHaveLength(1);
-        expect(convertedSnippets).toContain("<snippet>");
-        expect(convertedSnippets).toContain(parsedSnippets[0].prefix);
-        expect(convertedSnippets).toContain(parsedSnippets[0].description);
-    });
-
-    it('should convert the snippets -> Dreamweaver to VSCode', async () => {
-        const converter = await new Converter(RawDwSnippets[0], "vscode").init();
-        const parsedSnippets = await converter.parse();
-        const convertedSnippets = await converter.convert(parsedSnippets);
-
-        expect(parsedSnippets).toHaveLength(1);
-        expect(convertedSnippets).toContain(parsedSnippets[0].prefix);
-        expect(convertedSnippets).toContain(parsedSnippets[0].description);
-    });
-
-    it('should convert the snippets -> Sublime to Dreamweaver', async () => {
-        const converter = await new Converter(RawSublimeSnippets[0], "dreamweaver").init();
-        const parsedSnippets = await converter.parse();
-        const convertedSnippets = await converter.convert(parsedSnippets);
-
-        expect(parsedSnippets).toHaveLength(1);
-        expect(convertedSnippets).toContain(`<snippet name="${parsedSnippets[0].name}"`);
-        expect(convertedSnippets).toContain("afterSelection");
-        expect(convertedSnippets).toContain(parsedSnippets[0].prefix);
-        expect(convertedSnippets).toContain(parsedSnippets[0].description);
-    });
-});
-
-describe('Converter.convert (multiple)', () => {
-    it('should convert the snippets -> Atom to Sublime', async () => {
-        const converter = await new Converter(RawAtomSnippets.join("\n"), "sublime").init();
-        const parsedSnippets = await converter.parse();
-        const convertedSnippets = await converter.convert(parsedSnippets);
-
-        expect(parsedSnippets).toHaveLength(2);
-        expect(convertedSnippets).toContain("<snippet>");
-        expect(convertedSnippets).toContain(parsedSnippets[0].prefix);
-        expect(convertedSnippets).toContain(parsedSnippets[1].prefix);
-    });
-
-    it('should convert the snippets -> Sublime to Dreamweaver', async () => {
-        const converter = await new Converter(RawSublimeSnippets.join(parser_variables.divider), "dreamweaver").init();
-        const parsedSnippets = await converter.parse();
-        const convertedSnippets = await converter.convert(parsedSnippets);
-
-        expect(parsedSnippets).toHaveLength(RawSublimeSnippets.length);
-        expect(convertedSnippets).toContain(`<snippet name="${parsedSnippets[0].name}"`);
-        expect(convertedSnippets).toContain("afterSelection");
-        expect(convertedSnippets).toContain(parsedSnippets[0].prefix);
-        expect(convertedSnippets).toContain(parsedSnippets[0].description);
-    });
-
-    it('should convert the snippets -> Dreamweaver to VSCode', async () => {
-        const converter = await new Converter(RawDwSnippets.join(parser_variables.divider), "vscode").init();
-        const parsedSnippets = await converter.parse();
-        const convertedSnippets = await converter.convert(parsedSnippets);
-
-        expect(parsedSnippets).toHaveLength(RawDwSnippets.length);
-        expect(convertedSnippets).toContain(parsedSnippets[0].prefix);
-        expect(convertedSnippets).toContain(parsedSnippets[0].description);
-    });
-
-    it('should convert the snippets -> VSCode to Atom', async () => {
-        const converter = await new Converter(RawVSCODESnippets, "atom").init();
-        const parsedSnippets = await converter.parse();
-        const convertedSnippets = await converter.convert(parsedSnippets);
-
-        expect(parsedSnippets).toHaveLength(2);
-        expect(convertedSnippets).toContain("*");
-        expect(convertedSnippets).toContain(parsedSnippets[0].prefix);
-        expect(convertedSnippets).toContain(parsedSnippets[1].prefix);
-    });
-});
+})

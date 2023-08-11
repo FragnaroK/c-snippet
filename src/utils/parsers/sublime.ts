@@ -98,10 +98,6 @@ class Sublime {
                 }
             };
 
-            // TODO : Add name to sublime snippet file
-            // if (parsedSnippet.name) {
-            //     xmlObject.snippet.name = parsedSnippet.name;
-            // }
             xmlObject.snippet.tabTrigger = prefix ?? "";
             xmlObject.snippet.description = description ?? "No description provided";
             xmlObject.snippet.scope = "#{NULL}";

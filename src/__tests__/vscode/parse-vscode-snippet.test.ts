@@ -45,16 +45,18 @@ const RawSnippets = `{
 	}
 }`;
 
-describe('VSCODE.parse', () => {
-    it('should parse a VS Code snippet', async () => {
-        const parsedSnippet = await VSCODE.parse(RawSnippets);
-        expect(parsedSnippet).toEqual(Snippets);
+describe('VSCode Snippet Parser', () => {
+    describe('VSCODE.parse', () => {
+        it('should parse a VS Code snippet', async () => {
+            const parsedSnippet = await VSCODE.parse(RawSnippets);
+            expect(parsedSnippet).toEqual(Snippets);
+        });
     });
-});
-
-describe('VSCODE.stringify', () => {
-    it('should stringify a VS Code snippet', async () => {
-        const stringifiedSnippet = await VSCODE.stringify(Snippets);
-        expect(stringifiedSnippet).toEqual(JSON.stringify(JSON.parse(RawSnippets), null, 2));
+    
+    describe('VSCODE.stringify', () => {
+        it('should stringify a VS Code snippet', async () => {
+            const stringifiedSnippet = await VSCODE.stringify(Snippets);
+            expect(stringifiedSnippet).toEqual(JSON.stringify(JSON.parse(RawSnippets), null, 2));
+        });
     });
 });

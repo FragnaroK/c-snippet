@@ -1,6 +1,6 @@
 import { Parser } from 'htmlparser2';
 
-const parser_variables = {
+export const parser_variables = {
     divider: '#{DIVIDER}',
     tabstop: '#{TABSTOP}',
     placeholder: '#{PLACEHOLDER}',
@@ -13,6 +13,12 @@ const parser_variables = {
         start: '#{NAME:',
         end: '}'
     },
+}
+
+export async function sleep(ms: number): Promise<void> {
+    return new Promise((resolve) => {
+        setTimeout(resolve, ms);
+    });
 }
 
 /**
@@ -31,7 +37,7 @@ const parser_variables = {
  * // { name: { John: '', Jane: '' }, age: { 21: '', 22: '' } }
  * 
  */
-function addKeysToObject(data: Array<any>, target: any): any {
+export function addKeysToObject(data: Array<any>, target: any): any {
     data.forEach((item) => {
         for (const key in item) {
             if (key in target) {
@@ -56,7 +62,7 @@ function addKeysToObject(data: Array<any>, target: any): any {
  * // ['Hello', 'World']
  * 
  */
-function trimArray(array: Array<string>, deep: boolean = false): Array<string> {
+export function trimArray(array: Array<string>, deep: boolean = false): Array<string> {
     if (!deep) return array.map((line) => line.trim()).filter((item) => item !== '');
     return array.map((line) => line.trim()).filter((item) => item !== '').map((line) => {
         return line.split('').filter((char) => char !== '\t').join('');
@@ -79,7 +85,7 @@ function trimArray(array: Array<string>, deep: boolean = false): Array<string> {
  * // </p>
  * 
  */
-function prettifyHTML(html: string): string {
+export function prettifyHTML(html: string): string {
     let output = '';
     let indentLevel = 1;
 
@@ -132,17 +138,12 @@ function prettifyHTML(html: string): string {
     return output; // Remove any trailing whitespace
 }
 
-
-export {
-    addKeysToObject,
-    trimArray,
-    prettifyHTML,
-    parser_variables
-};
+ 
 
 export default {
     addKeysToObject,
     trimArray,
     prettifyHTML,
-    parser_variables
+    parser_variables,
+    sleep
 };

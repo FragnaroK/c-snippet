@@ -12,7 +12,7 @@
 		"forceConsistentCasingInFileNames": true,
 		"resolveJsonModule": true,
 		"alwaysStrict": true,
-		"removeComments": true,
+		"removeComments": true, 
 	},
 	"include": ["src"],
 	

@@ -3,48 +3,48 @@ import { ParsedSnippet } from "../../types/types";
 
 
 const {
-    ATOM
+  ATOM
 } = Utils;
 
 // Collection of snippets to test
 const Snippet: ParsedSnippet[] = [
-    {
-        name: 'For Loop',
-        description: 'No description provided',
-        prefix: 'forloop',
-        body: [
-            'for (let i = 1; i <= ${1:number}; i++) {',
-            '  ${2:// Your code here}',
-            '}'
-        ],
-        scope: '.source.js'
-    },
-    {
-        name: 'For Loop 2',
-        description: 'No description provided',
-        prefix: 'forloop',
-        body: [
-            'for (let i = 1; i <= ${1:number}; i++) {',
-            '  ${2:// Your code here}',
-            '}'
-        ],
-        scope: '.source.js'
-    },
-    {
-        name: 'For Loop 3',
-        description: 'No description provided',
-        prefix: 'forloop',
-        body: [
-            'for (let i = 1; i <= ${1:number}; i++) {',
-            '  ${2:// Your code here}',
-            '}'
-        ],
-        scope: '.source.js'
-    },
+  {
+    name: 'For Loop',
+    description: 'No description provided',
+    prefix: 'forloop',
+    body: [
+      'for (let i = 1; i <= ${1:number}; i++) {',
+      '  ${2:// Your code here}',
+      '}'
+    ],
+    scope: '.source.js'
+  },
+  {
+    name: 'For Loop 2',
+    description: 'No description provided',
+    prefix: 'forloop',
+    body: [
+      'for (let i = 1; i <= ${1:number}; i++) {',
+      '  ${2:// Your code here}',
+      '}'
+    ],
+    scope: '.source.js'
+  },
+  {
+    name: 'For Loop 3',
+    description: 'No description provided',
+    prefix: 'forloop',
+    body: [
+      'for (let i = 1; i <= ${1:number}; i++) {',
+      '  ${2:// Your code here}',
+      '}'
+    ],
+    scope: '.source.js'
+  },
 ];
 
 const RawSnippets = [
-    `'.source.js':
+  `'.source.js':
     'For Loop':
       'prefix': 'forloop'
       'body': """
@@ -52,7 +52,7 @@ const RawSnippets = [
           \${2:// Your code here}
         }
       """`,
-    `
+  `
 '.source.js':
     'For Loop':
       'prefix': 'forloop'
@@ -71,28 +71,29 @@ const RawSnippets = [
       """
 `
 ];
- 
-describe('ATOM.parse', () => {
+
+describe('Atom Snippet Parser', () => {
+  describe('ATOM.parse', () => {
     it('should parse a CSON string into a ParsedSnippet array', async () => {
-        const parsedSnippets: ParsedSnippet[] = await ATOM.parse(RawSnippets[0]);
+      const parsedSnippets: ParsedSnippet[] = await ATOM.parse(RawSnippets[0]);
 
-        expect(parsedSnippets).toHaveLength(1);
+      expect(parsedSnippets).toHaveLength(1);
 
-        expect(parsedSnippets[0]).toHaveProperty('name');
-        expect(parsedSnippets[0]).toHaveProperty('description');
-        expect(parsedSnippets[0]).toHaveProperty('prefix');
-        expect(parsedSnippets[0]).toHaveProperty('body');
-        expect(parsedSnippets[0]).toHaveProperty('scope');
+      expect(parsedSnippets[0]).toHaveProperty('name');
+      expect(parsedSnippets[0]).toHaveProperty('description');
+      expect(parsedSnippets[0]).toHaveProperty('prefix');
+      expect(parsedSnippets[0]).toHaveProperty('body');
+      expect(parsedSnippets[0]).toHaveProperty('scope');
 
-        expect(parsedSnippets[0]).toMatchObject({
-            name: expect.any(String),
-            description: expect.any(String),
-            prefix: expect.any(String),
-            body: expect.any(Array),
-            scope: expect.any(String)
-        });
+      expect(parsedSnippets[0]).toMatchObject({
+        name: expect.any(String),
+        description: expect.any(String),
+        prefix: expect.any(String),
+        body: expect.any(Array),
+        scope: expect.any(String)
+      });
 
-        expect(parsedSnippets[0]).toEqual(Snippet[0]);
+      expect(parsedSnippets[0]).toEqual(Snippet[0]);
     });
 
     it('should parse a CSON string with multiple sources into a ParsedSnippet array', async () => {
@@ -107,23 +108,23 @@ describe('ATOM.parse', () => {
       expect(parsedSnippets[0]).toHaveProperty('scope');
 
       expect(parsedSnippets[0]).toMatchObject({
-          name: expect.any(String),
-          description: expect.any(String),
-          prefix: expect.any(String),
-          body: expect.any(Array),
-          scope: expect.any(String)
+        name: expect.any(String),
+        description: expect.any(String),
+        prefix: expect.any(String),
+        body: expect.any(Array),
+        scope: expect.any(String)
       });
 
       expect(parsedSnippets[0]).toEqual({
-          name: 'For Loop',
-          description: 'No description provided',
-          prefix: 'forloop',
-          body: [
-              'for (let i = 1; i <= ${1:number}; i++) {',
-              '  ${2:// Your code here}',
-              '}'
-          ],
-          scope: '.source.js'
+        name: 'For Loop',
+        description: 'No description provided',
+        prefix: 'forloop',
+        body: [
+          'for (let i = 1; i <= ${1:number}; i++) {',
+          '  ${2:// Your code here}',
+          '}'
+        ],
+        scope: '.source.js'
       });
 
       expect(parsedSnippets[1]).toHaveProperty('name');
@@ -133,33 +134,33 @@ describe('ATOM.parse', () => {
       expect(parsedSnippets[1]).toHaveProperty('scope');
 
       expect(parsedSnippets[1]).toMatchObject({
-          name: expect.any(String),
-          description: expect.any(String),
-          prefix: expect.any(String),
-          body: expect.any(Array),
-          scope: expect.any(String)
+        name: expect.any(String),
+        description: expect.any(String),
+        prefix: expect.any(String),
+        body: expect.any(Array),
+        scope: expect.any(String)
       });
 
       expect(parsedSnippets[1]).toEqual({
-          name: 'For Loop 2',
-          description: 'No description provided',
-          prefix: 'forloop',
-          body: [
-              'for (let i = 1; i <= ${1:number}; i++) {',
-              '  ${2:// Your code here}',
-              '}'
-          ],
-          scope: '.source.ts'
+        name: 'For Loop 2',
+        description: 'No description provided',
+        prefix: 'forloop',
+        body: [
+          'for (let i = 1; i <= ${1:number}; i++) {',
+          '  ${2:// Your code here}',
+          '}'
+        ],
+        scope: '.source.ts'
       });
+    });
   });
-});
- 
 
-describe('ATOM.stringify', () => {
+
+  describe('ATOM.stringify', () => {
     it('should stringify a ParsedSnippet into a CSON string', async () => {
-        const csonString: string = await ATOM.stringify(Snippet);
+      const csonString: string = await ATOM.stringify(Snippet);
 
-        expect(csonString).toEqual(`'*':
+      expect(csonString).toEqual(`'*':
   'For Loop':
     'prefix': 'forloop'
     'body': '''
@@ -182,4 +183,5 @@ describe('ATOM.stringify', () => {
       }
     '''`);
     });
+  });
 });

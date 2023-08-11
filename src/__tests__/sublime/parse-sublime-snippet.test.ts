@@ -85,51 +85,53 @@ function trimArray(array: string[]): string[] {
     return trimmedArray;
 }
 
-describe('SUBLIME.parse', () => {
-    it('should parse a Sublime string into a ParsedSnippet object', async () => {
-        const parsedSnippet = await SUBLIME.parse(RawSnippets[0], 'Random Div');
-        expect(parsedSnippet).toEqual(Snippet[0]);
-    });
-
-    it('should parse multiple Sublime strings into a ParsedSnippet array', async () => {
-        const parsedSnippets: ParsedSnippet[] = [];
-
-        for (let i = 0; i < RawSnippets.length; i++) {
-            const parsedSnippet = await SUBLIME.parse(RawSnippets[i], `${Snippet[i].name}`);
-            parsedSnippets.push(parsedSnippet);
-        }
-
-        expect(parsedSnippets[0]).toEqual(Snippet[0]);
-        expect(parsedSnippets[1]).toEqual(Snippet[1]);
-        expect(parsedSnippets[2]).toEqual(Snippet[2]);
-    });
-
-});
-
-describe('SUBLIME.stringify', () => {
-    it('should stringify a ParsedSnippet object into a Sublime string', async () => {
-        const sublimeString = await SUBLIME.stringify(Snippet[0]);
-        expect(trimArray(sublimeString.split('\n'))).toEqual(trimArray(RawSnippets[0].split('\n')));
-    });
-
-    it('should stringify a ParsedSnippet array into a Sublime string',  async () => {
-        let snippets: string[] = [];   
-             
-        for (const snip of Snippet) {
-            let snippet = await SUBLIME.stringify(snip);
-            snippets.push(snippet);
-        }
-
-        const sublimeString = snippets.map((snippet) => {
-            return trimArray(snippet.split('\n'));
+describe('Sublime Snippet Parser', () => {
+    describe('SUBLIME.parse', () => {
+        it('should parse a Sublime string into a ParsedSnippet object', async () => {
+            const parsedSnippet = await SUBLIME.parse(RawSnippets[0], 'Random Div');
+            expect(parsedSnippet).toEqual(Snippet[0]);
         });
-
-        expect(sublimeString[0]).toEqual(trimArray(RawSnippets[0].split('\n')));
-        expect(sublimeString[1]).toEqual(trimArray(RawSnippets[1].split('\n')));
-        expect(sublimeString[2]).toEqual(trimArray(RawSnippets[2].split('\n')));
+    
+        it('should parse multiple Sublime strings into a ParsedSnippet array', async () => {
+            const parsedSnippets: ParsedSnippet[] = [];
+    
+            for (let i = 0; i < RawSnippets.length; i++) {
+                const parsedSnippet = await SUBLIME.parse(RawSnippets[i], `${Snippet[i].name}`);
+                parsedSnippets.push(parsedSnippet);
+            }
+    
+            expect(parsedSnippets[0]).toEqual(Snippet[0]);
+            expect(parsedSnippets[1]).toEqual(Snippet[1]);
+            expect(parsedSnippets[2]).toEqual(Snippet[2]);
+        });
+    
     });
-
-
+    
+    describe('SUBLIME.stringify', () => {
+        it('should stringify a ParsedSnippet object into a Sublime string', async () => {
+            const sublimeString = await SUBLIME.stringify(Snippet[0]);
+            expect(trimArray(sublimeString.split('\n'))).toEqual(trimArray(RawSnippets[0].split('\n')));
+        });
+    
+        it('should stringify a ParsedSnippet array into a Sublime string',  async () => {
+            let snippets: string[] = [];   
+                 
+            for (const snip of Snippet) {
+                let snippet = await SUBLIME.stringify(snip);
+                snippets.push(snippet);
+            }
+    
+            const sublimeString = snippets.map((snippet) => {
+                return trimArray(snippet.split('\n'));
+            });
+    
+            expect(sublimeString[0]).toEqual(trimArray(RawSnippets[0].split('\n')));
+            expect(sublimeString[1]).toEqual(trimArray(RawSnippets[1].split('\n')));
+            expect(sublimeString[2]).toEqual(trimArray(RawSnippets[2].split('\n')));
+        });
+    
+    
+    });
 });
 
 // describe('DREAMWEAVER.parseFile', () => {
