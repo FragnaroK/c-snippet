@@ -1,4 +1,5 @@
 import { Parser } from 'htmlparser2';
+import { ParserType } from 'src/types/types';
 
 export const parser_variables = {
     divider: '#{DIVIDER}',
@@ -19,6 +20,21 @@ export async function sleep(ms: number): Promise<void> {
     return new Promise((resolve) => {
         setTimeout(resolve, ms);
     });
+}
+
+export const blank = async (lines: number = 1): Promise<void> => Promise.resolve(console.log('\n'.repeat(lines)))
+
+
+export async function isMultipleFile(editor: ParserType) {
+    if (editor === "sublime" || editor === "dreamweaver") return true;
+    return false;
+}
+
+export const isArray = (value: any): value is any[] => Array.isArray(value);
+
+export function errorHandler(error: Error, msg?: string): void {
+    console.error(msg ?? "", error);
+    process.exit(1);
 }
 
 /**
@@ -138,12 +154,16 @@ export function prettifyHTML(html: string): string {
     return output; // Remove any trailing whitespace
 }
 
- 
+
 
 export default {
     addKeysToObject,
     trimArray,
     prettifyHTML,
     parser_variables,
-    sleep
+    sleep,
+    isMultipleFile,
+    errorHandler,
+    isArray,
+    blank
 };
