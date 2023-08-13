@@ -1,3 +1,4 @@
 {
-    "jest.rootPath": "./src"
+    "jest.rootPath": "./src",
+    "jest.jestCommandLine": "npx jest --config ../jest.config.js"
 }

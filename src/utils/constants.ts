@@ -1,7 +1,6 @@
 import chalk from "chalk";
 import { textSync } from "figlet";
-import ora, { Color } from "ora";
-import { aesthetic } from 'cli-spinners';
+import { Color } from "ora";
 import logSymbols from "log-symbols";
 
 export const THEME = {
@@ -19,26 +18,21 @@ export const THEME = {
     hidden: chalk.bgBlackBright,
 }
 
-export const spinner = ora({
-    color: THEME.accent.text,
-    spinner: aesthetic,
-    hideCursor: true,
-    text: 'Loading...',
-});
+
 
 const cliWidth = 69;
 
 const lineWidth = (text: string): number => {
-    const spacing = Math.floor(((cliWidth  / 2) + ((text.length + 2) / 2)));
-
+    const spacing = Math.floor(((cliWidth  / 1.75) - ((text.length + 2) / 2)));
     return spacing > 0 ? spacing : 10;
 };
 
 const Layout = {
     line: (blank: boolean = true, width: number = cliWidth) => `${blank ? '\n\n' : ''}${THEME.accent.bg.hidden(":".repeat(width))}${blank ? '\n\n' : ''}`,
-    centeredText(text: string) {
-        return `\n\n${" ".repeat(lineWidth(text))}${text}\n\n`;
-    },
+    indentedText: (text: string, options: {
+        blank?: boolean,
+        dim?: boolean
+    }) => `${options.blank ? '\n\n' : ''}${" ".repeat(5)} ${options.dim ? chalk.dim(text) : text} ${options.blank ? '\n\n' : ''}`,
     centeredWithLine(text: string) {
         return `\n\n${this.line(false, lineWidth(text))} ${text} ${this.line(false, lineWidth(text))}\n\n`;
     }
@@ -46,6 +40,7 @@ const Layout = {
 
 export const _CLI = {
     banner: textSync('C-Snippet', { horizontalLayout: 'full', font: 'ANSI Shadow' }),
+    layout: Layout,
     initial_text() {
         return [
             Layout.line(),
@@ -57,14 +52,14 @@ export const _CLI = {
     },
     help() {},
     version() {},
-    about() {},
-    convert() {},
-    listSnippets(snippets: string[], files: string[]) {
-        const found = `${logSymbols.success} Found ${THEME.main.bold(snippets.length)} snippets in ${THEME.main.bold(files.length)} files`;
+    listSnippets(files: string[], count: number) {
         return [ 
-            Layout.centeredWithLine(chalk.underline('Snippets found')),
-            Layout.centeredText(found),
-            Layout.line(),
+            // Layout.centeredWithLine(chalk.underline('Snippets found')),
+            Layout.indentedText(`${logSymbols.success} Found ${THEME.main.bold(count)} snippets in ${THEME.main.bold(files.length)} files`, {
+                blank: false,
+                dim: true
+            }),
+            // Layout.line(),
         ]
     },
 

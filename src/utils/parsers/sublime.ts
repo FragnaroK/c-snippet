@@ -87,7 +87,7 @@ class Sublime {
 
             });
 
-            const { body, prefix, description } = parsedSnippet;
+            const { body, prefix, description, name } = parsedSnippet;
 
             const xmlObject: RawSublimeSnippets = {
                 snippet: {
@@ -106,7 +106,7 @@ class Sublime {
                 .replace(/#{\s*NULL\s*}/g, "")
                 .replace("CDATA[", "CDATA[\n");
 
-            return snippetOBJ;
+            return `#{NAME:${name}}${snippetOBJ}`;
         } catch (error: any) {
             throw new Error(`Error converting parsed snippet to Sublime Text snippet: ${error.message}`);
         }

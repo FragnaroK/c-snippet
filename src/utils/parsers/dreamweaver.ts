@@ -117,10 +117,12 @@ class Dreamweaver {
                 }
             };
 
-            return builder.buildObject(insertTextElements)
-                .replace(/#{\s*NULL\s*}/g, "")
-                .replace("<![CDATA[", "\n<![CDATA[\n")
-                .replace("]]>", "\n]]>\n");
+            const snippetOBJ = builder.buildObject(insertTextElements)
+            .replace(/#{\s*NULL\s*}/g, "")
+            .replace("<![CDATA[", "\n<![CDATA[\n")
+            .replace("]]>", "\n]]>\n");
+
+            return `#{NAME:${name}}${snippetOBJ}`
         } catch (err: any) {
             throw new Error('Failed to convert parsed snippet to Dreamweaver snippet XML: ' + err.message);
         }

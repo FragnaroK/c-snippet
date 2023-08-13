@@ -1,0 +1,13 @@
+'*':
+  'Comment divider':
+    'prefix': 'cmt-divider'
+    'body': '''
+      $BLOCK_COMMENT_START<||========================= ${1:TITLE} =========================||> $BLOCK_COMMENT_END
+      $0
+    '''
+  'Comment divider - Small':
+    'prefix': 'cmt-divider-sm'
+    'body': '''
+      $BLOCK_COMMENT_START |=|=|=|=> ${1:TITLE} <=|=|=|=| $BLOCK_COMMENT_END
+      $0
+    '''

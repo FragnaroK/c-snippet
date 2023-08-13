@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<snippet name="Comment divider" description="Insert a big comment divider" preview="cmt-divider" type="block">
+<insertText location="beforeSelection">
+<![CDATA[
+$BLOCK_COMMENT_START<||========================= ${1:TITLE} =========================||> $BLOCK_COMMENT_END$0
+]]>
+</insertText>
+<insertText location="afterSelection"></insertText>
+</snippet>

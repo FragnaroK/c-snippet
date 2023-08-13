@@ -74,8 +74,10 @@ export async function readFiles(filepaths: string[]): Promise<{ filepath: string
  */
 export async function writeFile(options: WriteOptions): Promise<[filepath: string, content: string]> {
     const { filepath, content, filename } = options;
-    const outdir = filepath.split(filename)[0];
-    const fname = filepath ? filepath.split(filename)[1] : filename;
+    const outdir = filepath.includes(filename) ? filepath.split(filename)[0] : filepath;
+    const fname = filepath.includes(filename) ? filepath.split(filename)[1] : filename;
+
+    console.log()
 
     try {
         await fs.access(outdir);
@@ -84,10 +86,10 @@ export async function writeFile(options: WriteOptions): Promise<[filepath: strin
     }
 
     await fs.writeFile(`${outdir}/${fname}`, content).catch((err) => {
-        console.error(err);
+        throw new Error(err);
     });
 
-    return [filepath ?? `./${filename}`, `${content.slice(0, 20)}...`];
+    return [filepath ?? `./${fname}`, `${content.slice(0, 20)}...`];
 }
 
 /**

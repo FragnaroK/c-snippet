@@ -95,8 +95,8 @@ export interface ConverterInterface {
 }
 
 export interface WriteOptions {
-    outdir?: string;
-    filename?: string;
+    filepath: string;
+    filename: string;
     overwrite?: boolean;
     content: string;
     [key: string]: any;

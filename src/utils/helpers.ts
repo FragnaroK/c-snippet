@@ -25,9 +25,30 @@ export async function sleep(ms: number): Promise<void> {
 export const blank = async (lines: number = 1): Promise<void> => Promise.resolve(console.log('\n'.repeat(lines)))
 
 
-export async function isMultipleFile(editor: ParserType) {
+export function isMultipleFile(editor: ParserType) {
     if (editor === "sublime" || editor === "dreamweaver") return true;
     return false;
+}
+
+export function getSnippetName(snippet: string) {
+    const { start, end } = parser_variables.snippetName
+    // get snippet name inside #{NAME: ...} using regExp
+    const regex = /#{NAME:\s*(.*?)\s*}/;
+    const match = regex.exec(snippet);
+    const name = match && match[1] ? match[1] : "No Name";
+
+    const filteredSnippet = snippet.replace(`${start}${name}${end}`, "");
+    const cleanName = name.trim().replace(/\s/g, "-");
+    return { cleanName, filteredSnippet };
+}
+
+export function getFileExtension(editor: ParserType) {
+    switch (editor) {
+        case 'vscode': return ".code-snippets"
+        case 'sublime': return ".sublime-snippet"
+        case 'atom': return ".cson"
+        case 'dreamweaver': return ".csn"
+    }
 }
 
 export const isArray = (value: any): value is any[] => Array.isArray(value);
@@ -165,5 +186,7 @@ export default {
     isMultipleFile,
     errorHandler,
     isArray,
-    blank
+    blank,
+    getSnippetName,
+    getFileExtension
 };
