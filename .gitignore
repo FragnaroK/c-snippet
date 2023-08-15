@@ -126,13 +126,14 @@ dist
 .yarn/install-state.gz
 .pnp.*
 
-# ignore compiled code
-/lib
 
-# ignore allure report
+# ignore  reports
 /allure-report
 /allure-results
+performance-report.csv
+performance-report.json
 
 
 # Others
 /target
+/src/__tests__/snippets/converted/**/*

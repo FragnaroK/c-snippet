@@ -1,5 +1,6 @@
 import Utils from "../../utils/utils";
 import { ParsedSnippet } from "../../types/types";
+import { getSnippetName } from "../../utils/helpers";
 
 const {
     SUBLIME
@@ -109,7 +110,7 @@ describe('Sublime Snippet Parser', () => {
     
     describe('SUBLIME.stringify', () => {
         it('should stringify a ParsedSnippet object into a Sublime string', async () => {
-            const sublimeString = await SUBLIME.stringify(Snippet[0]);
+            const sublimeString = getSnippetName(await SUBLIME.stringify(Snippet[0])).filteredSnippet;
             expect(trimArray(sublimeString.split('\n'))).toEqual(trimArray(RawSnippets[0].split('\n')));
         });
     
@@ -122,7 +123,8 @@ describe('Sublime Snippet Parser', () => {
             }
     
             const sublimeString = snippets.map((snippet) => {
-                return trimArray(snippet.split('\n'));
+                const f = getSnippetName(snippet)
+                return trimArray(f.filteredSnippet.split('\n'));
             });
     
             expect(sublimeString[0]).toEqual(trimArray(RawSnippets[0].split('\n')));

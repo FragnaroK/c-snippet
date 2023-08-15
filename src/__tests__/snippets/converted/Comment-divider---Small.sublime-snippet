@@ -1,7 +1,0 @@
-<snippet>
-<content><![CDATA[
-$BLOCK_COMMENT_START |=|=|=|=> ${1:TITLE}<=|=|=|=| $BLOCK_COMMENT_END$0]]></content>
-<tabTrigger>cmt-divider-sm</tabTrigger>
-<description>Insert a small comment divider</description>
-<scope></scope>
-</snippet>

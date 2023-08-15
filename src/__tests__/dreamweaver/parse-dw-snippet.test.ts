@@ -1,5 +1,6 @@
 import Utils from "../../utils/utils";
 import { ParsedSnippet } from "../../types/types";
+import { getSnippetName } from '../../utils/helpers';
 
 const {
     DREAMWEAVER
@@ -106,7 +107,7 @@ describe('Dreamweaver Snippet Parser', () => {
 
     describe('DREAMWEAVER.stringify', () => {
         it('should stringify a ParsedSnippet array into a CSN string', async () => {
-            const stringifiedSnippet = await DREAMWEAVER.stringify(Snippet[0]);
+            const stringifiedSnippet = getSnippetName(await DREAMWEAVER.stringify(Snippet[0])).filteredSnippet;
             expect(trimArray(stringifiedSnippet.split('\n'))).toEqual(trimArray(RawSnippets[0].split('\n')));
         });
 
@@ -115,7 +116,7 @@ describe('Dreamweaver Snippet Parser', () => {
 
 
             for (const snippet of Snippet) {
-                const stringifiedSnippet = await DREAMWEAVER.stringify(snippet);
+                const stringifiedSnippet = getSnippetName(await DREAMWEAVER.stringify(snippet)).filteredSnippet;
                 stringifiedSnippets.push(stringifiedSnippet);
             }
 

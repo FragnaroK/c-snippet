@@ -147,10 +147,12 @@ async function saveSnippet(snippet: string, output: string, editor: ParserType) 
 }
 
 const main = async () => {
+    spinner.start("Loading C-SNIPPET");
     try { 
-
-        // ./src/__tests__/snippets/snippets.code-snippets
+        // ? ./src/__tests__/snippets/snippets.code-snippets
         // TODO : Implement the CLI interface without using inquirer (yargs?) 
+
+        spinner.stop();
         console.log(..._CLI.initial_text());
 
         const { fromEditor, toEditor, snippetsPath, outputPath } = await getParams();
@@ -178,9 +180,11 @@ const main = async () => {
             dim: true
         })));
 
+        const savedSnippets = convertedSnippets.map((data) => saveSnippet(data.snippets, outputPath, data.editor))
         spinner.start("Saving snippets...");
-        const savedSnippets = convertedSnippets.map(async (data) => await saveSnippet(data.snippets, outputPath, data.editor))
-        await Promise.all(savedSnippets);
+        await Promise.all(savedSnippets).catch((error) => {
+            throw new Error("Error while saving snippet" + error);
+        });
         await sleep(1000);
         spinner.succeed("Snippets saved!");
 
@@ -190,7 +194,6 @@ const main = async () => {
         }))
 
         await blank();
-        // console.log(fromEditor, toEditor, snippetsPath, outputPath);
 
     } catch (error) {
         if (spinner.isSpinning) spinner.fail("Something went wrong!");
