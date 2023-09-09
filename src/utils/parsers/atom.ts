@@ -1,7 +1,7 @@
 import { readFile } from 'fs/promises';
 import { parse, stringify } from 'cson-parser';
 import { ParsedSnippet, RawAtomSnippets } from "../../types/types"
-import { addKeysToObject } from '../helpers';
+import { addKeysToObject, isArray } from '../helpers';
 
 
 /**
@@ -61,7 +61,7 @@ class Atom {
         const isSnippet = await Promise.resolve(filePathOrString.includes(".source"));
         const isCorrectFormat = await Atom.parse(filePathOrString).then((snippets) => snippets.every((snippet) => snippet.prefix !== undefined && snippet.body !== undefined));
 
-        return await Promise.all([isCSON, isSnippet, isCorrectFormat]).then((values) => values.some((value) => value === true)); 
+        return await Promise.all([isCSON, isSnippet, isCorrectFormat]).then((values) => values.some((value) => value === true));
     }
 
     /**
@@ -118,7 +118,7 @@ class Atom {
             const snippetObject = snippets.map((snippet) => ({
                 [`${snippet.name}`]: {
                     prefix: snippet.prefix,
-                    body: snippet.body.join('\n')
+                    body: isArray(snippet.body) ? snippet.body.join('\n') : snippet.body,
                 }
             }));
 
@@ -130,7 +130,7 @@ class Atom {
                 .replace(/prefix/g, "'prefix'")
                 .replace(/body/g, "'body'");
         } catch (error: any) {
-            throw new Error(`Error stringifying snippets: ${error.message}`);
+            throw new Error(`(ATOM) Error stringifying snippets: ${error.message}`);
         }
     }
 }

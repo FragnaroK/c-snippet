@@ -1,6 +1,6 @@
 import Utils from './utils/utils';
 import { ConverterInterface, ParsedSnippet, ParserType } from './types/types';
-import { parser_variables } from './utils/helpers';
+import { parserVariables } from './utils/helpers';
 
 /**
  * Class representing a converter for snippets.
@@ -54,7 +54,7 @@ class Converter implements ConverterInterface {
      * @returns {string} The name of the snippet.
      */
     private static getSnippetName(snippet: string): string {
-        const { start, end } = parser_variables.snippetName;
+        const { start, end } = parserVariables.snippetName;
         const startStr = snippet.indexOf(start);
         const endStr = snippet.indexOf(end);
         return startStr !== -1 && endStr !== -1 ? snippet.substring(startStr + start.length, endStr) : 'unnamed-snippet';
@@ -101,7 +101,7 @@ class Converter implements ConverterInterface {
         if (!source) source = this.source;
         if (!source) throw new Error('No source found');
 
-        const rawSnippets = this.snippets.includes(parser_variables.divider) ? this.snippets.split(parser_variables.divider) : [this.snippets];
+        const rawSnippets = this.snippets.includes(parserVariables.divider) ? this.snippets.split(parserVariables.divider) : [this.snippets];
 
         if (['vscode', 'atom'].includes(source)) {
             return await this.parsers[source].parse(this.snippets, "") as ParsedSnippet[];
@@ -144,7 +144,7 @@ class Converter implements ConverterInterface {
         }
 
         const convertedSnippets = await Promise.all(convertPromises);
-        return convertedSnippets.join(parser_variables.divider);
+        return convertedSnippets.join(parserVariables.divider);
     }
 }
 

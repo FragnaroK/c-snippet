@@ -6,7 +6,7 @@
  * */
 
 import Converter from '../../converter';
-import { parser_variables } from '../../utils/helpers';
+import { parserVariables } from '../../utils/helpers';
 
 const RawVSCODESnippets = `{
     "Comment divider": {
@@ -218,13 +218,13 @@ describe('Converter Without Source Specified', () => {
         });
 
         it('should parse the snippets -> Sublime', async () => {
-            const converter = await new Converter(RawSublimeSnippets.join(parser_variables.divider)).init();
+            const converter = await new Converter(RawSublimeSnippets.join(parserVariables.divider)).init();
             const parsedSnippets = await converter.parse();
             expect(parsedSnippets).toHaveLength(RawSublimeSnippets.length);
         });
 
         it('should parse the snippets -> Dreamweaver', async () => {
-            const converter = await new Converter(RawDwSnippets.join(parser_variables.divider)).init();
+            const converter = await new Converter(RawDwSnippets.join(parserVariables.divider)).init();
             const parsedSnippets = await converter.parse();
             expect(parsedSnippets).toHaveLength(RawDwSnippets.length);
         });
@@ -296,7 +296,7 @@ describe('Converter Without Source Specified', () => {
         });
 
         it('should convert the snippets -> Sublime to Dreamweaver', async () => {
-            const converter = await new Converter(RawSublimeSnippets.join(parser_variables.divider), "dreamweaver").init();
+            const converter = await new Converter(RawSublimeSnippets.join(parserVariables.divider), "dreamweaver").init();
             const parsedSnippets = await converter.parse();
             const convertedSnippets = await converter.convert(parsedSnippets);
 
@@ -308,7 +308,7 @@ describe('Converter Without Source Specified', () => {
         });
 
         it('should convert the snippets -> Dreamweaver to VSCode', async () => {
-            const converter = await new Converter(RawDwSnippets.join(parser_variables.divider), "vscode").init();
+            const converter = await new Converter(RawDwSnippets.join(parserVariables.divider), "vscode").init();
             const parsedSnippets = await converter.parse();
             const convertedSnippets = await converter.convert(parsedSnippets);
 

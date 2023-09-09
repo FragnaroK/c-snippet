@@ -133,7 +133,6 @@ dist
 performance-report.csv
 performance-report.json
 
-
 # Others
 /target
 /src/__tests__/snippets/converted/**/*

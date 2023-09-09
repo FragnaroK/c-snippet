@@ -89,3 +89,9 @@ export interface WriteOptions {
     content: string;
     [key: string]: any;
 }
+export interface CliArgs {
+    fromEditor: ParserType;
+    toEditor: ParserType | ParserType[];
+    snippetsPath: string;
+    outputPath: string;
+}

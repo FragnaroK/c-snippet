@@ -18,12 +18,12 @@ export const THEME = {
     hidden: chalk.bgBlackBright,
 }
 
-
+export const available_editors = ["vscode", "sublime", "atom", "dreamweaver"];
 
 const cliWidth = 69;
 
 const lineWidth = (text: string): number => {
-    const spacing = Math.floor(((cliWidth  / 1.75) - ((text.length + 2) / 2)));
+    const spacing = Math.floor(((cliWidth / 1.75) - ((text.length + 2) / 2)));
     return spacing > 0 ? spacing : 10;
 };
 
@@ -39,6 +39,7 @@ const Layout = {
 }
 
 export const _CLI = {
+    width: cliWidth,
     banner: textSync('C-Snippet', { horizontalLayout: 'full', font: 'ANSI Shadow' }),
     layout: Layout,
     initial_text() {
@@ -50,10 +51,10 @@ export const _CLI = {
             "\n\n"
         ]
     },
-    help() {},
-    version() {},
+    // help() {},
+    // version() {},
     listSnippets(files: string[], count: number) {
-        return [ 
+        return [
             // Layout.centeredWithLine(chalk.underline('Snippets found')),
             Layout.indentedText(`${logSymbols.success} Found ${THEME.main.bold(count)} snippets in ${THEME.main.bold(files.length)} files`, {
                 blank: false,

@@ -13,7 +13,7 @@ declare const Utils: {
     addKeysToObject: typeof import("./helpers").addKeysToObject;
     trimArray: typeof import("./helpers").trimArray;
     prettifyHTML: typeof import("./helpers").prettifyHTML;
-    parser_variables: {
+    parserVariables: {
         divider: string;
         tabstop: string;
         placeholder: string;
@@ -34,5 +34,6 @@ declare const Utils: {
     blank: (lines?: number) => Promise<void>;
     getSnippetName: typeof import("./helpers").getSnippetName;
     getFileExtension: typeof import("./helpers").getFileExtension;
+    escapeSpecialCharacters: typeof import("./helpers").escapeSpecialCharacters;
 };
 export default Utils;

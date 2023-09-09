@@ -1,8 +1,6 @@
-/** @type {import('jest').Config} */
 
 const config = {
   verbose: true,
-  clearMocks: true,
   displayName: { 
     name: 'TEST',
     color: 'blue',
@@ -25,10 +23,7 @@ const config = {
   },
   testMatch: ['**/__tests__/**/*.ts?(x)', '**/?(*.)+(spec|test).ts?(x)'],
   moduleFileExtensions: ['ts', 'tsx', 'js', 'jsx', 'json', 'node'],
-  moduleDirectories: ['<rootDir>', 'node_modules'],
-  testEnvironment: 'node',
-  testTimeout: 10000, 
-  watchAll: false,
+  moduleDirectories: ['<rootDir>', 'node_modules']
 };
 
 module.exports = config;

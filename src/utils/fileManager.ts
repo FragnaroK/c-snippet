@@ -77,7 +77,6 @@ export async function writeFile(options: WriteOptions): Promise<[filepath: strin
     const outdir = filepath.includes(filename) ? filepath.split(filename)[0] : filepath;
     const fname = filepath.includes(filename) ? filepath.split(filename)[1] : filename;
 
-    console.log()
 
     try {
         await fs.access(outdir);

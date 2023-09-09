@@ -14,7 +14,9 @@ export declare const THEME: {
     info: chalk.Chalk;
     hidden: chalk.Chalk;
 };
+export declare const available_editors: string[];
 export declare const _CLI: {
+    width: number;
     banner: string;
     layout: {
         line: (blank?: boolean, width?: number) => string;
@@ -25,7 +27,5 @@ export declare const _CLI: {
         centeredWithLine(text: string): string;
     };
     initial_text(): string[];
-    help(): void;
-    version(): void;
     listSnippets(files: string[], count: number): string[];
 };

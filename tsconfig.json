@@ -5,15 +5,22 @@
 		"declaration": true,
 		"baseUrl": ".",
 		"outDir": "./lib",
-		"strict": true,
 		"types": ["@types/jest", "@types/node"],
 		"pretty": true,
+
+		"strict": true,
+		"alwaysStrict": true,
 		"esModuleInterop": true,
 		"forceConsistentCasingInFileNames": true,
 		"resolveJsonModule": true,
-		"alwaysStrict": true,
-		"removeComments": true, 
+		"removeComments": false, 
+		
 	},
+
+	"buildOptions": {
+		"verbose": true
+	},
+
 	"include": ["src"],
 	
 	"exclude": ["node_modules", "**/__tests__/*"]

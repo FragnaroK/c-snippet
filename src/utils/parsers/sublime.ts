@@ -1,7 +1,7 @@
 import { ParsedSnippet, RawSublimeSnippets } from '../../types/types';
 import { readFile } from 'fs/promises';
 import { Parser, Builder } from 'xml2js';
-import { prettifyHTML, trimArray } from '../helpers';
+import { escapeSpecialCharacters, isArray, prettifyHTML, trimArray } from '../helpers';
 
 /**
  * A utility class for parsing and stringifying Sublime Text snippets.
@@ -20,7 +20,7 @@ class Sublime {
         const isSublime = await Promise.resolve(filePathOrString.endsWith('.sublime-snippet'));
         const isCorrectFormat = await Sublime.parse(filePathOrString, name).then((snippet) => snippet.prefix !== undefined && snippet.body !== undefined);
 
-        return await Promise.all([isSublime, isCorrectFormat]).then((values) => values.some((value) => value === true)); 
+        return await Promise.all([isSublime, isCorrectFormat]).then((values) => values.some((value) => value === true));
     }
 
     /**
@@ -89,10 +89,13 @@ class Sublime {
 
             const { body, prefix, description, name } = parsedSnippet;
 
+            // <FORCEDATA> is a workaround to force xml2js to render CDATA
+            // ? Could be improved by using a custom render function
+
             const xmlObject: RawSublimeSnippets = {
                 snippet: {
                     content: {
-                        _: prettifyHTML(body.join('')),
+                        _: `<FORCEDATA>\n${escapeSpecialCharacters(prettifyHTML(isArray(body) ? body.join('\n') : body))}\n</FORCEDATA>`,
                         $: {}
                     }
                 }
@@ -104,11 +107,14 @@ class Sublime {
 
             const snippetOBJ = (builder.buildObject(xmlObject))
                 .replace(/#{\s*NULL\s*}/g, "")
-                .replace("CDATA[", "CDATA[\n");
+                .replace("CDATA[", "CDATA[\n")
+                .replace("]]>", "\n]]>")
+                .replace(/<FORCEDATA>\n/g, "")
+                .replace(/\n<\/FORCEDATA>/g, "");
 
             return `#{NAME:${name}}${snippetOBJ}`;
         } catch (error: any) {
-            throw new Error(`Error converting parsed snippet to Sublime Text snippet: ${error.message}`);
+            throw new Error(`Error converting parsed snippet to Sublime XML snippet: ${error.message}`);
         }
     }
 }

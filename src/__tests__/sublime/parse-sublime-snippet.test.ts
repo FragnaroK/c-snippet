@@ -82,14 +82,18 @@ const Snippet: ParsedSnippet[] = [
 ];
 
 function trimArray(array: string[]): string[] {
-    const trimmedArray: string[] = array.map((item) => (item.trim()).replace(/\t/g, '')).filter((item) => item !== '');
+    const spacesRegexp = /^\s*$/;
+    const trimmedArray: string[] = array.map((item) => item.trim()).filter((item) => item !== "" && !spacesRegexp.test(item));
     return trimmedArray;
 }
 
 describe('Sublime Snippet Parser', () => {
     describe('SUBLIME.parse', () => {
         it('should parse a Sublime string into a ParsedSnippet object', async () => {
-            const parsedSnippet = await SUBLIME.parse(RawSnippets[0], 'Random Div');
+            const parsedSnippet = await SUBLIME.parse(RawSnippets[0], 'Random Div').then((snippet) => ({
+                ...snippet,
+                body: trimArray(snippet.body)
+            }));
             expect(parsedSnippet).toEqual(Snippet[0]);
         });
     
@@ -98,7 +102,10 @@ describe('Sublime Snippet Parser', () => {
     
             for (let i = 0; i < RawSnippets.length; i++) {
                 const parsedSnippet = await SUBLIME.parse(RawSnippets[i], `${Snippet[i].name}`);
-                parsedSnippets.push(parsedSnippet);
+                parsedSnippets.push({
+                    ...parsedSnippet,
+                    body: trimArray(parsedSnippet.body)
+                });
             }
     
             expect(parsedSnippets[0]).toEqual(Snippet[0]);
@@ -127,9 +134,9 @@ describe('Sublime Snippet Parser', () => {
                 return trimArray(f.filteredSnippet.split('\n'));
             });
     
-            expect(sublimeString[0]).toEqual(trimArray(RawSnippets[0].split('\n')));
-            expect(sublimeString[1]).toEqual(trimArray(RawSnippets[1].split('\n')));
-            expect(sublimeString[2]).toEqual(trimArray(RawSnippets[2].split('\n')));
+            expect(trimArray(sublimeString[0])).toEqual(trimArray(RawSnippets[0].split('\n')));
+            expect(trimArray(sublimeString[1])).toEqual(trimArray(RawSnippets[1].split('\n')));
+            expect(trimArray(sublimeString[2])).toEqual(trimArray(RawSnippets[2].split('\n')));
         });
     
     

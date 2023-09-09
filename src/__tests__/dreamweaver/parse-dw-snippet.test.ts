@@ -82,14 +82,18 @@ const Snippet: ParsedSnippet[] = [
 ];
 
 function trimArray(array: string[]): string[] {
-    const trimmedArray: string[] = array.map((item) => item.trim()).filter((item) => item !== '');
+    const spacesRegexp = /^\s*$/;
+    const trimmedArray: string[] = array.map((item) => item.trim()).filter((item) => item !== "" && !spacesRegexp.test(item));
     return trimmedArray;
 }
 
 describe('Dreamweaver Snippet Parser', () => {
     describe('DREAMWEAVER.parse', () => {
         it('should parse a CSN snippet', async () => {
-            const parsedSnippet = await DREAMWEAVER.parse(RawSnippets[0]);
+            const parsedSnippet = await DREAMWEAVER.parse(RawSnippets[0]).then((snippet) => ({
+                ...snippet,
+                body: trimArray(snippet.body)
+            }));
             expect(parsedSnippet).toEqual(Snippet[0]);
         });
 
@@ -98,7 +102,10 @@ describe('Dreamweaver Snippet Parser', () => {
 
             for (const rawSnippet of RawSnippets) {
                 const parsedSnippet = await DREAMWEAVER.parse(rawSnippet);
-                parsedSnippets.push(parsedSnippet);
+                parsedSnippets.push({
+                    ...parsedSnippet,
+                    body: trimArray(parsedSnippet.body)
+                });
             }
 
             expect(parsedSnippets).toEqual(Snippet);

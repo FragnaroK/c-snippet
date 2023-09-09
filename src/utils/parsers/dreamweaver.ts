@@ -1,7 +1,7 @@
 import { Parser, Builder } from 'xml2js';
 import { readFileSync } from 'fs';
 import { DreamweaverSnippet, DreamweaverSnippetContent, ParsedSnippet } from '../../types/types';
-import { prettifyHTML, trimArray } from '../helpers';
+import { escapeSpecialCharacters, isArray, prettifyHTML, trimArray } from '../helpers';
 
 /**
  * Represents a utility class for working with Dreamweaver snippets.
@@ -21,7 +21,7 @@ class Dreamweaver {
         const isCSN = await Promise.resolve(filePathOrString.endsWith('.csn'));
         const isCorrectFormat = await Dreamweaver.parse(filePathOrString).then((snippet) => snippet.prefix !== undefined && snippet.body !== undefined);
 
-        return await Promise.all([isCSN, isCorrectFormat]).then((values) => values.some((value) => value === true)); 
+        return await Promise.all([isCSN, isCorrectFormat]).then((values) => values.some((value) => value === true));
     }
 
     /**
@@ -53,7 +53,7 @@ class Dreamweaver {
             parser.parseString(snippet, (err, res) => {
                 const result: DreamweaverSnippet = res;
                 const snippetElement: DreamweaverSnippetContent = result.snippet;
-                
+
                 parsedSnippet.name = snippetElement.$.name;
                 parsedSnippet.description = snippetElement.$.description;
                 parsedSnippet.prefix = snippetElement.$.preview;
@@ -92,6 +92,10 @@ class Dreamweaver {
 
             const { name, description, prefix, body } = snippet;
 
+
+            // <FORCEDATA> is a workaround to force xml2js to render CDATA
+            // ? Could be improved by using a custom render function
+
             const insertTextElements: DreamweaverSnippet = {
                 snippet: {
                     $: {
@@ -105,7 +109,7 @@ class Dreamweaver {
                             $: {
                                 location: 'beforeSelection'
                             },
-                            _: prettifyHTML(body.join(''))
+                            _: `<FORCEDATA>\n${escapeSpecialCharacters(prettifyHTML(isArray(body) ? body.join('\n') : body))}\n</FORCEDATA>`
                         },
                         {
                             $: {
@@ -118,9 +122,11 @@ class Dreamweaver {
             };
 
             const snippetOBJ = builder.buildObject(insertTextElements)
-            .replace(/#{\s*NULL\s*}/g, "")
-            .replace("<![CDATA[", "\n<![CDATA[\n")
-            .replace("]]>", "\n]]>\n");
+                .replace(/#{\s*NULL\s*}/g, "")
+                .replace("<![CDATA[", "\n<![CDATA[\n")
+                .replace("]]>", "\n]]>\n")
+                .replace(/<FORCEDATA>\n/g, "")
+                .replace(/\n<\/FORCEDATA>/g, "");
 
             return `#{NAME:${name}}${snippetOBJ}`
         } catch (err: any) {
