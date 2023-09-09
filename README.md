@@ -31,6 +31,25 @@ c-snippet
 
 Follow the prompts to select the source editor, target editor(s), input snippets, and output path. C-Snippet will then parse, convert, and save the snippets accordingly.
 
+### One line command
+
+You can also run the tool in a single command by passing the required options as arguments. Here's an example:
+
+```bash
+c-snippet -f vscode -t atom -s ./snippets -o ./output
+```
+
+The above command will convert all snippets from the `./snippets` folder to Atom format and save them to the `./output` folder.
+
+### Options
+
+| Option | Description |
+| --- | --- |
+| `-f, --fromEditor <editor>` | The source editor. |
+| `-t, --toEditor <editor>` | The target editor(s). |
+| `-s, --snippetsPath <path>` | The path to the input snippets. |
+| `-o, --outputPath <path>` | The path to the output snippets. |
+
 ## 📜 Scripts
 
 - `npm start`: Build and run the tool in a single command.
@@ -38,6 +57,14 @@ Follow the prompts to select the source editor, target editor(s), input snippets
 - `npm run build`: Compile TypeScript code.
 - `npm test`: Run Jest tests.
 - `npm run repo:commit`: Stage, commit, and push changes to the repository.
+
+## 📦 Supported Editors
+
+- [Visual Studio Code](https://code.visualstudio.com/)
+- [Atom](https://atom.io/)
+- [Sublime Text](https://www.sublimetext.com/)
+- [Dreamweaver](https://www.adobe.com/products/dreamweaver.html)
+
 
 ## 🤝 Contributing
 

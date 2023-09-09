@@ -8,7 +8,6 @@ async function build() {
   // Build typescript project using tsc, chalk and ora (spinner)
 
   const { exec } = require('child_process');
-  const chalk = require('chalk');
   const ora = require('ora');
 
   const spinner = ora('Building project...').start();
