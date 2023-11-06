@@ -1,33 +1,29 @@
 #!/usr/bin/env node
-import { CliArgs, ParserType } from 'src/types/types';
+import { CliArgs } from 'src/types/types';
 import yargs from 'yargs';
 import { hideBin } from 'yargs/helpers';
 import Utils from '../utils/utils';
 import CLIGUI from './cliGUI';
-import { convertSnippet, getSnippets, parseSnippets, saveSnippet } from './paramsHandler';
 import { available_editors } from '../utils/constants';
 import chalk from 'chalk';
+import Logger from 'node-logger-cli';
 
 interface YargsArgs extends CliArgs {
     _: (string | number)[];
     $0: string;
 }
 
+const log = new Logger("CLI", process.env.NODE_ENV === "development");
+
 // TODO : Improve character escaping
 // TODO : Add more tests
 // TODO : Download and test snippets in different editors
 
 const {
-    isDir,
     sleep,
-    isMultipleFile,
     errorHandler,
-    isArray,
     spinner,
-    parserVariables,
     blank,
-    getSnippetName,
-    getFileExtension
 } = Utils;
 
 
@@ -76,7 +72,6 @@ const main = async () => {
     try {
         console.log("🚀 Welcome to Snippets Converter CLI! 🚀 (One line command)");
         blank();
-        // console.log("One line command will be available soon! For now, please use the interactive CLI. 😅");
 
         const params = await getParams()
         .then((params) => {
@@ -91,6 +86,8 @@ const main = async () => {
         spinner.start("Loading C-SNIPPET");
         await sleep(3000);
         spinner.stop();
+
+        log.d("Params selected", { params })
 
         await CLIGUI(params?.fromEditor && params?.toEditor && params?.snippetsPath && params?.outputPath ? params : undefined);
 

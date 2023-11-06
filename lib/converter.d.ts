@@ -4,6 +4,7 @@ import { ConverterInterface, ParsedSnippet, ParserType } from './types/types';
  * Class representing a converter for snippets.
  */
 declare class Converter implements ConverterInterface {
+    private log;
     /**
      * The source of the parser.
      * @type {ParserType | undefined}

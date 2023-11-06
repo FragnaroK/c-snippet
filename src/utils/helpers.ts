@@ -2,6 +2,9 @@ import chalk from 'chalk';
 import { Parser } from 'htmlparser2';
 import { ParserType } from 'src/types/types';
 import { _CLI } from './constants';
+import Logger from 'node-logger-cli';
+
+const log = new Logger("Utils", process.env.NODE_ENV === "development");
 
 /**
  * Constants for parser variables.
@@ -29,11 +32,12 @@ export const parserVariables = {
  */
 export function escapeSpecialCharacters(input: string, times: number = 1): string {
     let escapeText = input;
-
+    log.d("Escaping special characters", { input, times });
     for (let i = 0; i < times; i++) {
         escapeText = escapeText.replace(/[*+?^${}|[\]\\]/g, '\\$&');
     }
-
+    
+    log.d("Escaped special characters", { escapeText });
     return escapeText;
 }
 
@@ -71,7 +75,7 @@ export function getSnippetName(snippet: string): { cleanName: string; filteredSn
     const { start, end } = parserVariables.snippetName;
     const regex = /#{NAME:\s*(.*?)\s*}/;
     const match = regex.exec(snippet);
-    const name = match && match[1] ? match[1] : "No Name";
+    const name = match ? match[1] : "No Name";
     const filteredSnippet = snippet.replace(`${start}${name}${end}`, "");
     const cleanName = name.trim().replace(/\s/g, "-");
     return { cleanName, filteredSnippet };
@@ -108,6 +112,7 @@ export function errorHandler(error: Error, msg?: string): void {
     const regex = /(error:|Error:)/g;
     const parsedErrorStack = error.stack?.split(regex).map((item, i) => `${chalk.dim(".".repeat(i))}${chalk.dim(item.trim())}`).join("\n");
 
+    log.e("Error", { error, msg, parsedErrorStack });
     console.error(
         msg ?? "❌ ERROR",
         `\n${'🔻'.repeat(_CLI.width / 2)}\n`,
@@ -143,7 +148,7 @@ export function addKeysToObject(data: Record<string, any>[], target: Record<stri
  * @param deep - Whether to perform deep trimming (removing tabs).
  * @returns An array of trimmed strings.
  */
-export function trimArray(array: string[], deep?: boolean): string[] {
+export function trimArray(array: string[]): string[] {
     const spacesRegexp = /^\s*$/;
     const trimmedArray: string[] = array.map((item) => item.trim()).filter((item) => item !== "" && !spacesRegexp.test(item));
     return trimmedArray;

@@ -1,6 +1,6 @@
 {
   "name": "c-snippet",
-  "version": "1.0.0",
+  "version": "2.0.0",
   "description": "Convert snippets from any code editor (TS)",
   "main": "index.js",
   "files": [
@@ -23,9 +23,10 @@
     "typescript"
   ],
   "scripts": {
-    "start": "cls && npm run build && node lib/index.js",
-    "start:linux": "clear && npm run build && node lib/cli/cli.js",
-    "test:oneline": "clear && npm run build && node ./lib/cli/cli.js -f \"vscode\" -t \"sublime\" -s './src/__tests__/snippets/snippets.code-snippets' -o './src/__tests__/snippets/converted'",
+    "start": "npm run build && SET NODE_ENV=development && node lib/cli/cli.js",
+    "start:linux": "npm run build && NODE_ENV=development node lib/cli/cli.js",
+    "test:oneline": "npm run build && SET NODE_ENV=development && node ./lib/cli/cli.js -f \"vscode\" -t \"sublime\" -s \"./src/__tests__/snippets/snippets.code-snippets\" -o \"./src/__tests__/snippets/converted\"",
+    "test:oneline:linux": "npm run build && NODE_ENV=development node ./lib/cli/cli.js -f \"vscode\" -t \"sublime\" -s \"./src/__tests__/snippets/snippets.code-snippets\" -o \"./src/__tests__/snippets/converted\"",
     "build": "tsc-builder prod",
     "test": "npx jest --config jest.config.js",
     "repo:commit": "git add . && git commit && git push origin"
@@ -60,6 +61,7 @@
     "htmlparser2": "^9.0.0",
     "jest": "^29.6.2",
     "log-symbols": "^4.1.0",
+    "node-logger-cli": "^1.0.3",
     "ora": "^3.2.0",
     "xml2js": "^0.6.2",
     "yargs": "^17.7.2"

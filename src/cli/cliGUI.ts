@@ -3,6 +3,9 @@ import Utils from '../utils/utils';
 import { input, select, checkbox } from '@inquirer/prompts';
 import { _CLI } from '../utils/constants';
 import { convertSnippet, getSnippets, parseSnippets, saveSnippet } from './paramsHandler';
+import Logger from 'node-logger-cli';
+
+const log = new Logger("CLI-GUI", process.env.NODE_ENV === "development");
 
 const {
     isDir,
@@ -65,6 +68,8 @@ async function getParams(): Promise<CliArgs> {
     const snippetsPath = await input(await snippets(fromEditor));
     const outputPath = await input(await output(isArray(toEditor) ? toEditor : [toEditor]));
 
+    log.d("Params selected", { fromEditor, toEditor, snippetsPath, outputPath })
+
     return { fromEditor, toEditor, snippetsPath, outputPath };
 }
 
@@ -83,7 +88,7 @@ const main = async (params?: CliArgs) => {
         await blank(1);
 
         spinner.start("Reading snippets...");
-        const [snippets, files, snippetsCount] = await getSnippets(fromEditor, snippetsPath);
+        const [snippets,, snippetsCount] = await getSnippets(fromEditor, snippetsPath);
         await sleep(1000);
         spinner.succeed("Snippets read!");
 
@@ -122,7 +127,6 @@ const main = async (params?: CliArgs) => {
     } catch (error: any) {
         if (spinner.isSpinning) spinner.fail('Something went wrong!');
         throw new Error(error);
-        // ! errorHandler not needed because of the throw (Catched in cli.ts)
     }
 }
 

@@ -11,7 +11,6 @@ export async function isDir(dir: string): Promise<boolean> {
     try {
         const isDirectory = (await fs.stat(dir)).isDirectory();
         const isFile = (await fs.stat(dir)).isFile();
-        
         return Promise.all([isDirectory, isFile]).then((values) => values.some((value) => value === true));
     } catch (error) {
         return false;

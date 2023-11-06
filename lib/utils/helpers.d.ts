@@ -78,7 +78,7 @@ export declare function addKeysToObject(data: Record<string, any>[], target: Rec
  * @param deep - Whether to perform deep trimming (removing tabs).
  * @returns An array of trimmed strings.
  */
-export declare function trimArray(array: string[], deep?: boolean): string[];
+export declare function trimArray(array: string[]): string[];
 /**
  * Prettifies an HTML string.
  * @param html - An HTML string.
