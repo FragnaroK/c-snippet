@@ -1,29 +1,16 @@
-
-const config = {
+/** @type {import('ts-jest').JestConfigWithTsJest} */
+module.exports = {
+  preset: 'ts-jest',
   verbose: true,
-  displayName: { 
-    name: 'TEST',
-    color: 'blue',
-  }, 
-  reporters: [
-    "default",
-    [
-      "@jest-performance-reporter/core",
-      {
-        "errorAfterMs": 5000,
-        "warnAfterMs": 500,
-        "logLevel": "warn", 
-        "jsonReportPath": "performance-report.json",
-        "csvReportPath": "performance-report.csv"
-      }
-    ]
-  ],
+  lastCommit: true,
+  testEnvironment: 'node', 
   transform: {
     '^.+\\.(t|j)sx?$': 'ts-jest',
   },
-  testMatch: ['**/__tests__/**/*.ts?(x)', '**/?(*.)+(spec|test).ts?(x)'],
+  testMatch: ['**/__tests__/**/?(*.)+(spec|test).ts?(x)', '**/?(*.)+(spec|test).ts?(x)'],
   moduleFileExtensions: ['ts', 'tsx', 'js', 'jsx', 'json', 'node'],
-  moduleDirectories: ['<rootDir>', 'node_modules']
+  testPathIgnorePatterns: ['/node_modules/', '/dist/'],
+  rootDir: './',
+  roots: ['<rootDir>/src'],
+  modulePaths: ['<rootDir>/src'],
 };
-
-module.exports = config;
