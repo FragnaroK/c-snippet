@@ -1,23 +1,16 @@
-/** @type {import('jest').Config} */
-
-const config = {
+/** @type {import('ts-jest').JestConfigWithTsJest} */
+module.exports = {
+  preset: 'ts-jest',
   verbose: true,
-  clearMocks: true,
-  displayName: { 
-    name: 'TEST',
-    color: 'blue',
-  }, 
+  lastCommit: true,
+  testEnvironment: 'node', 
   transform: {
     '^.+\\.(t|j)sx?$': 'ts-jest',
   },
-  testMatch: ['**/__tests__/**/*.ts?(x)', '**/?(*.)+(spec|test).ts?(x)'],
+  testMatch: ['**/__tests__/**/?(*.)+(spec|test).ts?(x)', '**/?(*.)+(spec|test).ts?(x)'],
   moduleFileExtensions: ['ts', 'tsx', 'js', 'jsx', 'json', 'node'],
-  moduleDirectories: ['<rootDir>', 'node_modules'],
-  moduleNameMapper: {
-    '^@root/(.*)$': '<rootDir>/src/$1',
-    '^@interfaces/(.*)$': '<rootDir>/src/types/$1',
-    '^@utils/(.*)$': '<rootDir>/src/utils/$1',
-  },
+  testPathIgnorePatterns: ['/node_modules/', '/dist/'],
+  rootDir: './',
+  roots: ['<rootDir>/src'],
+  modulePaths: ['<rootDir>/src'],
 };
-
-module.exports = config;

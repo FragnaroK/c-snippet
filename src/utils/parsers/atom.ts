@@ -1,7 +1,7 @@
 import { readFile } from 'fs/promises';
 import { parse, stringify } from 'cson-parser';
-import { ParsedSnippet, RawAtomSnippets } from "@interfaces"
-import { addKeysToObject } from '../helpers';
+import { ParsedSnippet, RawAtomSnippets } from "../../types/types"
+import { addKeysToObject, isArray } from '../helpers';
 
 
 /**
@@ -13,8 +13,55 @@ class Atom {
      * @param parsedCSON - The parsed CSON object.
      * @returns An array of source strings.
      */
-    static getSources(parsedCSON: RawAtomSnippets): string[] {
+    private static getSources(parsedCSON: RawAtomSnippets): string[] {
         return Object.keys(parsedCSON).filter((key) => key.startsWith('.source'));
+    }
+
+    /**
+    * Parses a parsed CSON object and returns an array of parsed snippets.
+    * @param parsedCSON - The parsed CSON object.
+    * @param sources - An array of source strings.
+    * @returns An array of parsed snippets.
+    */
+    private static async parseParsedCSON(parsedCSON: RawAtomSnippets, sources: string[]): Promise<ParsedSnippet[]> {
+        try {
+            const parsedSnippets: ParsedSnippet[] = [];
+
+            sources.forEach((source) => {
+                const snippets = parsedCSON[source];
+                Object.keys(snippets).forEach((key) => {
+                    const snippet = snippets[key];
+                    const parsedSnippet: ParsedSnippet = {
+                        name: key,
+                        description: "No description provided",
+                        prefix: snippet.prefix,
+                        body: snippet.body.split('\n'),
+                        scope: source,
+                    };
+                    parsedSnippets.push(parsedSnippet);
+                });
+            });
+
+            return parsedSnippets;
+        } catch (error: any) {
+            throw new Error(`Error parsing parsed CSON object: ${error.message}`);
+        }
+    }
+
+    /**
+     * Checks if the given file path or string is an Atom snippet file.
+     * @param filePathOrString - The file path or string to check.
+     * @returns `true` if the given file path or string is a Atom snippet file, otherwise `false`.
+     * @throws {Error} If there is an error reading the file or parsing the CSON.
+     * 
+     */
+    public static async isSnippet(filePathOrString: string): Promise<boolean> {
+
+        const isCSON = await Promise.resolve(filePathOrString.endsWith('.cson'));
+        const isSnippet = await Promise.resolve(filePathOrString.includes(".source"));
+        const isCorrectFormat = await Atom.parse(filePathOrString).then((snippets) => snippets.every((snippet) => snippet.prefix !== undefined && snippet.body !== undefined));
+
+        return await Promise.all([isCSON, isSnippet, isCorrectFormat]).then((values) => values.some((value) => value === true));
     }
 
     /**
@@ -23,10 +70,10 @@ class Atom {
      * @returns A promise that resolves to an array of parsed snippets.
      * @throws {Error} If there is an error reading or parsing the CSON file.
      */
-    static async parseFile(filePath: string): Promise<ParsedSnippet[]> {
+    public static async parseFile(filePath: string): Promise<ParsedSnippet[]> {
         try {
             const csonContent = await readFile(filePath, 'utf8');
-            return Atom.parseString(csonContent);
+            return Atom.parse(csonContent);
         } catch (error: any) {
             throw new Error(`Error reading or parsing CSON file: ${error.message}`);
         }
@@ -38,7 +85,7 @@ class Atom {
      * @returns An array of parsed snippets.
      * @throws {Error} If there is an error parsing the CSON string.
      */
-    static parseString(csonContent: string): ParsedSnippet[] {
+    public static async parse(csonContent: string): Promise<ParsedSnippet[]> {
         try {
             if (!csonContent) throw new Error('No CSON content provided');
             if (typeof csonContent !== 'string') throw new Error('CSON content must be a string');
@@ -51,61 +98,40 @@ class Atom {
             // Check if the parsed CSON object has any sources
             const sources = Atom.getSources(parsedCSON);
             if (sources.length === 0) throw new Error('Parsed CSON object has no sources');
-            if (sources.length > 1) console.warn('Parsed CSON object has multiple sources, they will be merged into one (global)');
+            // if (sources.length > 1) console.warn('Parsed CSON object has multiple sources, they will be merged into one (global)');
 
-            return Atom.parseParsedCSON(parsedCSON, sources);
+            return await Atom.parseParsedCSON(parsedCSON, sources);
         } catch (error: any) {
             throw new Error(`Error parsing CSON string: ${error.message}`);
         }
     }
 
-    /**
-     * Parses a parsed CSON object and returns an array of parsed snippets.
-     * @param parsedCSON - The parsed CSON object.
-     * @param sources - An array of source strings.
-     * @returns An array of parsed snippets.
-     */
-    static parseParsedCSON(parsedCSON: RawAtomSnippets, sources: string[]): ParsedSnippet[] {
-        const parsedSnippets: ParsedSnippet[] = [];
 
-        sources.forEach((source) => {
-            const snippets = parsedCSON[source];
-            Object.keys(snippets).forEach((key) => {
-                const snippet = snippets[key];
-                const parsedSnippet: ParsedSnippet = {
-                    name: key,
-                    description: "No description provided",
-                    prefix: snippet.prefix,
-                    body: snippet.body.split('\n'),
-                    scope: source,
-                };
-                parsedSnippets.push(parsedSnippet);
-            });
-        });
-
-        return parsedSnippets;
-    }
 
     /**
      * Converts an array of parsed snippets to a CSON-formatted string.
      * @param snippets - An array of parsed snippets.
      * @returns A CSON-formatted string representing the snippets.
      */
-    static stringifySnippet(snippets: ParsedSnippet[]): string {
-        const snippetObject = snippets.map((snippet) => ({
-            [`${snippet.name}`]: {
-                prefix: snippet.prefix,
-                body: snippet.body.join('\n')
-            }
-        }));
+    public static async stringify(snippets: ParsedSnippet[]): Promise<string> {
+        try {
+            const snippetObject = snippets.map((snippet) => ({
+                [`${snippet.name}`]: {
+                    prefix: snippet.prefix,
+                    body: isArray(snippet.body) ? snippet.body.join('\n') : snippet.body,
+                }
+            }));
 
-        const sourcedSnippets = addKeysToObject(snippetObject, {});
+            const sourcedSnippets = addKeysToObject(snippetObject, {});
 
-        return stringify({
-            '*': sourcedSnippets
-        }, undefined, 2)
-            .replace(/prefix/g, "'prefix'")
-            .replace(/body/g, "'body'");
+            return stringify({
+                '*': sourcedSnippets
+            }, undefined, 2)
+                .replace(/prefix/g, "'prefix'")
+                .replace(/body/g, "'body'");
+        } catch (error: any) {
+            throw new Error(`(ATOM) Error stringifying snippets: ${error.message}`);
+        }
     }
 }
 

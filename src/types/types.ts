@@ -74,3 +74,37 @@ export type DreamweaverSnippetContent = {
 export interface DreamweaverSnippet {
     snippet: DreamweaverSnippetContent;
 }
+
+export interface ParserInterface {
+    parseFile(filePath: string): Promise<ParsedSnippet[]>;
+    parse(source: string): Promise<ParsedSnippet[]>;
+    stringify(snippets: ParsedSnippet[]): string;
+    [key: string]: any;
+}
+
+export type ParserType = 'vscode' | 'sublime' | 'atom' | 'dreamweaver';
+
+export interface ConverterInterface {
+    source?: ParserType;
+    parsers: any;
+    snippets: string;
+    init(): Promise<ConverterInterface>;
+    findSource(): Promise<string>;
+    parse(source?: string): Promise<ParsedSnippet[]>;
+    convert(snippet?: ParsedSnippet[]): Promise<string>;
+}
+
+export interface WriteOptions {
+    filepath: string;
+    filename: string;
+    overwrite?: boolean;
+    content: string;
+    [key: string]: any;
+}
+
+export interface CliArgs {
+    fromEditor: ParserType;
+    toEditor: ParserType | ParserType[];
+    snippetsPath: string;
+    outputPath: string;
+}

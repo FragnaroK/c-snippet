@@ -2,23 +2,26 @@
 	"compilerOptions": {
 		"target": "es6",
 		"module": "commonjs",
-		"declaration": true,
 		"baseUrl": ".",
 		"outDir": "./lib",
-		"strict": true,
-		"paths": {
-			"@root/*": ["src/*"],
-			"@interfaces": ["src/types/types.ts"],
-			"@utils/*": ["utils/*"],
-		},
 		"types": ["@types/jest", "@types/node"],
+		
+		"noImplicitAny": true,
+		"noUnusedLocals": true,
+		"noUnusedParameters": true,
+		"noImplicitReturns": true,
+
 		"pretty": true,
+		"strict": true,
+		"checkJs": true,
+		"allowJs": true,
+		"declaration": true,
+		"alwaysStrict": true,
+		"removeComments": false, 
 		"esModuleInterop": true,
-		"forceConsistentCasingInFileNames": true,
 		"resolveJsonModule": true,
-		"alwaysStrict": true
+		"forceConsistentCasingInFileNames": true,
 	},
 	"include": ["src"],
-	
 	"exclude": ["node_modules", "**/__tests__/*"]
 }

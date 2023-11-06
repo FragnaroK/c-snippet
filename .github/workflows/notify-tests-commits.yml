@@ -6,7 +6,8 @@ name: Notify commits
 on:
   push:
     branches:
-      - 'main'
+      - '**'
+
 
 jobs:
   build:
@@ -19,6 +20,11 @@ jobs:
         # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
 
     steps:
+    - name: Extract branch name
+      shell: bash
+      run: echo "branch=${GITHUB_HEAD_REF:-${GITHUB_REF#refs/heads/}}" >> $GITHUB_OUTPUT
+      id: extract_branch
+
     - uses: actions/checkout@v3
     - name: Use Node.js ${{ matrix.node-version }}
       uses: actions/setup-node@v3
@@ -40,7 +46,7 @@ jobs:
         url: 'https://maker.ifttt.com/trigger/${{ secrets.NOTIFY }}/json/with/key/${{ secrets.IFTTT_KEY }}'
         method: 'POST'
         customHeaders: '{"Content-Type": "application/json"}'
-        data: '{"repoName": "c-snippet","status": "success","details": "${{ vars.TEST_OK }}","repoLink": "https://github.com/FragnaroK/c-snippet"}'
+        data: '{"repoName": "c-snippet - ${{ steps.extract_branch.outputs.branch }}","status": "success","details": "${{ vars.TEST_OK }}","repoLink": "https://github.com/FragnaroK/c-snippet"}'
       
     - name: Notify test failure
       if: steps.tests.outcome != 'success' 
@@ -49,4 +55,4 @@ jobs:
         url: 'https://maker.ifttt.com/trigger/${{ secrets.NOTIFY }}/json/with/key/${{ secrets.IFTTT_KEY }}'
         method: 'POST'
         customHeaders: '{"Content-Type": "application/json"}'
-        data: '{"repoName": "c-snippet","status": "Error","details": "${{ vars.TEST_ER }}","repoLink": "https://github.com/FragnaroK/c-snippet"}'
+        data: '{"repoName": "c-snippet - ${{ steps.extract_branch.outputs.branch }}","status": "Error","details": "${{ vars.TEST_ER }}","repoLink": "https://github.com/FragnaroK/c-snippet"}'
