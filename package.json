@@ -29,7 +29,8 @@
     "test:oneline:linux": "npm run build && NODE_ENV=development node ./lib/cli/cli.js -f \"vscode\" -t \"sublime\" -s \"./src/__tests__/snippets/snippets.code-snippets\" -o \"./src/__tests__/snippets/converted\"",
     "build": "tsc-builder prod",
     "test": "npx jest --config jest.config.js",
-    "repo:commit": "git add . && git commit && git push origin"
+    "repo:commit": "git add . && git commit && git push origin",
+    "deploy": "npm run build && npm publish --access=public"
   },
   "author": "FragnaroK",
   "license": "MIT",
