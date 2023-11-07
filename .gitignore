@@ -136,4 +136,4 @@ performance-report.json
 # Others
 /target
 /src/__tests__/snippets/**/*
-lib/
+/lib
