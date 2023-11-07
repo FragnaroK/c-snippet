@@ -26,8 +26,8 @@ jobs:
         cache: 'npm'
         
     - name: Clean install of dependencies
-      run: npm ci
-    
+      run: npm ci 
+          
     - name: Run tests
       id: tests
       run: npm test
@@ -40,15 +40,17 @@ jobs:
         method: 'POST'
         customHeaders: '{"Content-Type": "application/json"}'
         data: '{"repoName": "c-snippet","status": "Pending","details": "${{ vars.TEST_OK_BUILD_PEN }}","repoLink": "https://github.com/FragnaroK/c-snippet"}'
-        
+       
     - name: Build on test success
       if: steps.tests.outcome == 'success'
       run: npm run build --if-present
-        
-    - name: Handle test failure
-      if: steps.tests.outcome != 'success'
-      run: echo "Tests failed, skipping build"
       
+    - name: Publish on test success
+      if: steps.tests.outcome == 'success'
+      run: npm publish --access=public
+      env:
+        NODE_AUTH_TOKEN: ${{ secrets.NPM_KEY }}
+        
     - name: Notify test failure
       if: steps.tests.outcome != 'success' 
       uses: fjogeleit/http-request-action@v1
