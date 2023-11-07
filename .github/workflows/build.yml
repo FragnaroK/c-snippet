@@ -4,8 +4,8 @@
 name: Build on tests success (released)
 
 on:
-  release:
-    types: [released]
+  push:
+    branches: [ main ]
 
 jobs:
   build:
@@ -23,6 +23,7 @@ jobs:
       uses: actions/setup-node@v3
       with:
         node-version: ${{ matrix.node-version }}
+        registry-url: 'https://registry.npmjs.org'
         cache: 'npm'
         
     - name: Clean install of dependencies
@@ -47,7 +48,7 @@ jobs:
       
     - name: Publish on test success
       if: steps.tests.outcome == 'success'
-      run: npm publish --access=public
+      run: npm publish
       env:
         NODE_AUTH_TOKEN: ${{ secrets.NPM_KEY }}
         
