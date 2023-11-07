@@ -1,12 +1,21 @@
 {
   "name": "c-snippet",
-  "version": "2.0.2",
+  "version": "2.0.3",
   "description": "Convert snippets from any code editor (TS)",
-  "main": "index.js",
+  "main": "index.js", 
+  "author": {
+    "name": "FragnaroK",
+    "email": "fcanalejo2000@outlook.com",
+    "url": "https://francocanalejo.com"
+  },
+  "homepage": "https://github.com/FragnaroK/c-snippet",
+  "bugs": {
+    "url": "https://github.com/FragnaroK/c-snippet/issues"
+  },
+  "bin": "./lib/cli/cli.js",
   "files": [
     "lib/**/*"
   ],
-  "bin": "./lib/cli/cli.js",
   "keywords": [
     "snippet",
     "converter",
@@ -31,8 +40,7 @@
     "test": "npx jest --config jest.config.js",
     "repo:commit": "git add . && git commit && git push origin",
     "deploy": "npm run build && npm publish --access=public"
-  },
-  "author": "FragnaroK",
+  }, 
   "license": "MIT",
   "devDependencies": {
     "@fragnarok/tsc-builder": "^1.0.4",
