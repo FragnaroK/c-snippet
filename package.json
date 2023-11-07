@@ -12,6 +12,10 @@
   "bugs": {
     "url": "https://github.com/FragnaroK/c-snippet/issues"
   },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/FragnaroK/c-snippet.git"
+  },
   "bin": "./lib/cli/cli.js",
   "files": [
     "lib/**/*",
