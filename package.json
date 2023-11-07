@@ -1,6 +1,6 @@
 {
   "name": "c-snippet",
-  "version": "2.0.1",
+  "version": "2.0.2",
   "description": "Convert snippets from any code editor (TS)",
   "main": "index.js",
   "files": [
