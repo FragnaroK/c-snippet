@@ -73,7 +73,7 @@ jobs:
         branch: '${{ steps.extract_branch.outputs.branch }}'
         details: ${{ steps.build.outcome == 'success' && vars.BUILD_OK_PUBLISH_PEN || format('{0} - {1}', vars.BUILD_ER_PUBLISH_SKIP, steps.build.outputs) }}
         repoLink: ${{ steps.extract_repo_url.outputs.repo_url }}
-
+        IFTTT_KEY: ${{ secrets.IFTTT_KEY }}
 
     - name: Publish on test success
       if: steps.tests.outcome == 'success' && steps.build.outcome == 'success'
