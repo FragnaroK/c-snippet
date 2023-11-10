@@ -20,7 +20,7 @@ export const THEME = {
 
 export const available_editors = ["vscode", "sublime", "atom", "dreamweaver"];
 
-const cliWidth = 69;
+const cliWidth = 69 ;
 
 const lineWidth = (text: string): number => {
     const spacing = Math.floor(((cliWidth / 1.75) - ((text.length + 2) / 2)));
