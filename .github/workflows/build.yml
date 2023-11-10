@@ -10,6 +10,8 @@ on:
 jobs:
   call-publisher:
     uses: fragnarok/Custom-GitHub-Action-Scripts/.github/workflows/build-test-publish-npm.yml@main
+    secrets: inherit
+      
 
   # build-and-publish:
 
