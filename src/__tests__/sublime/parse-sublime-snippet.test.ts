@@ -143,10 +143,3 @@ describe('Sublime Snippet Parser', () => {
     });
 });
 
-// describe('DREAMWEAVER.parseFile', () => {
-//     it('should parse a CSN file into a ParsedSnippet array', async () => {
-//         const parsedSnippets: ParsedSnippet[] = await DREAMWEAVER.parseFile('./src/__tests__/dreamweaver/snippets.csn');
-//         expect(parsedSnippets).toEqual(Snippet);
-//
-//     });
-// });
