@@ -1,7 +1,7 @@
 import { readFile } from 'fs/promises';
 import { parse, stringify } from 'cson-parser';
-import { ParsedSnippet, RawAtomSnippets } from "../../types/types"
-import { addKeysToObject, isArray } from '../helpers';
+import { ParsedSnippet, RawAtomSnippets } from "../types/types"
+import { addKeysToObject, isArray } from '../utils/helpers';
 
 
 /**

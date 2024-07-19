@@ -6,7 +6,7 @@ import Logger from 'node-logger-cli';
 /**
  * Class representing a converter for snippets.
  */
-class Converter implements ConverterInterface {
+export default class Converter implements ConverterInterface {
 
     private log = new Logger("Converter", process.env.NODE_ENV === "development")
 
@@ -91,6 +91,7 @@ class Converter implements ConverterInterface {
      * @throws {Error} If no valid source parser is found.
      */
     async findSource(): Promise<ParserType> {
+        // Checks snippets using isSnippet method of each parser
         const promises = Object.keys(this.parsers).map(async (parser) => {
             return this.parsers[parser].isSnippet(this.snippets, "").catch(() => false);
         });
@@ -98,11 +99,9 @@ class Converter implements ConverterInterface {
         const results = await Promise.all(promises);
         const sourceIndex = results.findIndex((result) => result);
 
-        if (sourceIndex !== -1) {
-            return Object.keys(this.parsers)[sourceIndex] as ParserType;
-        }
-
-        throw new Error('Snippets not valid');
+        if (sourceIndex === -1) throw new Error('Snippets not valid');
+        
+        return Object.keys(this.parsers)[sourceIndex] as ParserType;
     }
 
     /**
@@ -111,10 +110,9 @@ class Converter implements ConverterInterface {
      * @returns {Promise<ParsedSnippet[]>} The parsed snippets.
      * @throws {Error} If parsing fails or no source is found.
      */
-    async parse(source?: ParserType): Promise<ParsedSnippet[]> {
+    async parse(source: ParserType = this.source): Promise<ParsedSnippet[]> {
         this.log.d("Parsing snippets", { source, snippets: this.snippets })
-        if (!source) source = this.source;
-        if (!source) throw new Error('No source found');
+        if (!source) throw new Error('Missing source.');
 
         const rawSnippets = this.snippets.includes(parserVariables.divider) ? this.snippets.split(parserVariables.divider) : [this.snippets];
 
@@ -127,7 +125,7 @@ class Converter implements ConverterInterface {
             this.log.d("Parsing snippets from sublime or dreamweaver", { source, snippets: rawSnippets })
             const parsePromises = rawSnippets.map(async (snip) => {
                 const name = source === 'sublime' ? Converter.getSnippetName(snip) : undefined;
-                return this.parsers[source!].parse(snip, name ?? "") as Promise<ParsedSnippet>;
+                return this.parsers[source].parse(snip, name ?? "") as Promise<ParsedSnippet>;
             });
             return Promise.all(parsePromises);
         }
@@ -142,10 +140,9 @@ class Converter implements ConverterInterface {
      * @returns {Promise<string>} The converted snippets.
      * @throws {Error} If the method is not implemented.
      */
-    async convert(snippet?: ParsedSnippet[], to?: ParserType): Promise<string> {
+    async convert(snippet?: ParsedSnippet[], to: ParserType = this.target): Promise<string> {
         this.log.d("Converting snippets", { snippet, to, target: this.target })
         if (!snippet) snippet = await this.parse();
-        if (!to) to = this.target;
         if (!to) throw new Error('No target found');
 
         const convertPromises: Promise<string>[] = [];
@@ -158,7 +155,7 @@ class Converter implements ConverterInterface {
         if (['sublime', 'dreamweaver'].includes(to)) {
             this.log.d("Converting snippets to sublime or dreamweaver", { to, snippets: snippet })
             const stringified = snippet.map(async (snip) => {
-                return this.parsers[to!].stringify(snip as ParsedSnippet[] & ParsedSnippet);
+                return this.parsers[to].stringify(snip as ParsedSnippet[] & ParsedSnippet);
             });
             convertPromises.push(...stringified);
         }
@@ -167,5 +164,3 @@ class Converter implements ConverterInterface {
         return convertedSnippets.join(parserVariables.divider);
     }
 }
-
-export default Converter;

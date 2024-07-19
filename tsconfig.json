@@ -10,7 +10,12 @@
 		"noUnusedLocals": true,
 		"noUnusedParameters": true,
 		"noImplicitReturns": true,
-
+		"isolatedModules": true,
+		"noImplicitThis": true,
+		"strictBindCallApply": true,
+		"strictNullChecks": true,
+		"strictPropertyInitialization": true,
+	
 		"pretty": true,
 		"strict": true,
 		"checkJs": true,

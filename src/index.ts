@@ -1,4 +1,4 @@
-import Converter from "./converter";
+import CSnippet from "./converter";
 
 /**
  * @module c-snippet module for converting snippets from selected editors to other editors
@@ -7,16 +7,16 @@ import Converter from "./converter";
  * @requires cson-parser https://www.npmjs.com/package/cson-parser
  * 
  * @example   
- * const converter = new Converter(snippets, <targetEditors>, optional: <sourceEditor>);
- * const parsedSnippets = converter.parse(optional: <source>);
- * converter.convert(parsedSnippets);
+ * const cSnippet = new CSnippet(snippets, <targetEditors>, optional: <sourceEditor>);
+ * const parsedSnippets = cSnippet.parse(optional: <source>);
+ * cSnippet.convert(parsedSnippets);
  * 
  * 
  * @param {string} snippets - Snippets to be converted
  * @param {Array} target - Target editors to convert to
  * @param {String} source - Source editor to convert from
  * 
- * @returns {Converter} - Returns a new instance of Converter with the given parameters
+ * @returns {CSnippet} - Returns a new instance of CSnippet with the given parameters
  * 
  */
-export default Converter;
+export default CSnippet;

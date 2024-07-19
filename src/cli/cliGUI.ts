@@ -79,9 +79,8 @@ async function getParams(): Promise<CliArgs> {
  */
 const main = async (params?: CliArgs) => {
     try { 
-        // ! Path with snippets (TEST) -> ./src/__tests__/snippets/snippets.code-snippets
-        // TODO : Implement yargs to enable one line command (cli.ts) and move this code to a separate file (cliGUI.ts)
-
+        // Note: Path with snippets (TEST) -> ./src/__tests__/snippets/snippets.code-snippets
+        const delayBetweenSteps = 250;
         console.log(..._CLI.initial_text());
 
         const { fromEditor, toEditor, snippetsPath, outputPath } = params?? await getParams();
@@ -89,19 +88,19 @@ const main = async (params?: CliArgs) => {
 
         spinner.start("Reading snippets...");
         const [snippets,, snippetsCount] = await getSnippets(fromEditor, snippetsPath);
-        await sleep(1000);
-        spinner.succeed("Snippets read!");
+        await sleep(delayBetweenSteps);
+        spinner.succeed("Snippets retrieved!");
 
         console.log(..._CLI.listSnippets(isArray(snippets) ? snippets : [snippets], snippetsCount));
 
         spinner.start("Parsing snippets...");
         const [parsedSnippets, converter] = await parseSnippets(snippets, fromEditor);
-        await sleep(1000);
+        await sleep(delayBetweenSteps);
         spinner.succeed("Snippets parsed!");
 
         spinner.start("Converting snippets...");
         const convertedSnippets = await convertSnippet(converter, parsedSnippets, isArray(toEditor) ? toEditor : [toEditor]);
-        await sleep(1000);
+        await sleep(delayBetweenSteps);
         spinner.succeed("Snippets converted!");
 
         console.log(...convertedSnippets.map((editor) => _CLI.layout.indentedText(`${editor.editor} : ${parsedSnippets.length}`, {
@@ -114,7 +113,7 @@ const main = async (params?: CliArgs) => {
         await Promise.all(savedSnippets).catch((error) => {
             throw new Error("Error while saving snippets" + error);
         });
-        await sleep(1000);
+        await sleep(delayBetweenSteps);
         spinner.succeed("Snippets saved!");
 
         console.log(_CLI.layout.indentedText(`Snippets path: ${outputPath.toString()}`, {

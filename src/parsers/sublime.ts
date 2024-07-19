@@ -1,7 +1,7 @@
-import { ParsedSnippet, RawSublimeSnippets } from '../../types/types';
+import { ParsedSnippet, RawSublimeSnippets } from '../types/types';
 import { readFile } from 'fs/promises';
 import { Parser, Builder } from 'xml2js';
-import { escapeSpecialCharacters, isArray, prettifyHTML, trimArray } from '../helpers';
+import { escapeSpecialCharacters, isArray, prettifyHTML, trimArray } from '../utils/helpers';
 
 /**
  * A utility class for parsing and stringifying Sublime Text snippets.

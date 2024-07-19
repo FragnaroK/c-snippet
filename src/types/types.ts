@@ -82,14 +82,14 @@ export interface ParserInterface {
     [key: string]: any;
 }
 
-export type ParserType = 'vscode' | 'sublime' | 'atom' | 'dreamweaver';
+export type ParserType = 'vscode' | 'sublime' | 'atom' | 'dreamweaver' | undefined;
 
 export interface ConverterInterface {
     source?: ParserType;
     parsers: any;
     snippets: string;
     init(): Promise<ConverterInterface>;
-    findSource(): Promise<string>;
+    findSource(): Promise<ParserType>;
     parse(source?: string): Promise<ParsedSnippet[]>;
     convert(snippet?: ParsedSnippet[]): Promise<string>;
 }

@@ -1,4 +1,4 @@
-import { ParsedSnippet } from '../../types/types';
+import { ParsedSnippet } from '../types/types';
 import { readFile } from 'fs/promises';
 
 /**

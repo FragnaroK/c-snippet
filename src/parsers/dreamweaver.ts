@@ -1,7 +1,7 @@
 import { Parser, Builder } from 'xml2js';
 import { readFileSync } from 'fs';
-import { DreamweaverSnippet, DreamweaverSnippetContent, ParsedSnippet } from '../../types/types';
-import { escapeSpecialCharacters, isArray, prettifyHTML, trimArray } from '../helpers';
+import { DreamweaverSnippet, DreamweaverSnippetContent, ParsedSnippet } from "../types/types";
+import { escapeSpecialCharacters, isArray, prettifyHTML, trimArray } from '../utils/helpers';
 
 /**
  * Represents a utility class for working with Dreamweaver snippets.

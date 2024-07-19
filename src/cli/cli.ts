@@ -70,8 +70,8 @@ async function getParams(): Promise<CliArgs> {
  */
 const main = async () => {
     try {
-        console.log("🚀 Welcome to Snippets Converter CLI! 🚀 (One line command)");
         blank();
+        console.log("🚀 Welcome to Snippets Converter CLI! 🚀 (One line command)");
 
         const params = await getParams()
         .then((params) => {
@@ -83,9 +83,9 @@ const main = async () => {
         });
 
         blank();
-        spinner.start("Loading C-SNIPPET");
-        await sleep(3000);
-        spinner.stop();
+        // spinner.start("Loading C-SNIPPET");
+        // await sleep(3000);
+        // spinner.stop();
 
         log.d("Params selected", { params })
 

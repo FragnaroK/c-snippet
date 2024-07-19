@@ -1,4 +1,4 @@
-import Parsers from "./parsers/parsers";
+import Parsers from "../parsers/parsers";
 import Helpers from "./helpers";
 import FileManager from './fileManager';
 import { spinner } from './spinner';
