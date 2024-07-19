@@ -20,7 +20,6 @@ const log = new Logger("CLI", process.env.NODE_ENV === "development");
 // TODO : Download and test snippets in different editors
 
 const {
-    sleep,
     errorHandler,
     spinner,
     blank,
