@@ -8,7 +8,7 @@ import Logger from 'node-logger-cli';
  */
 export default class Converter implements ConverterInterface {
 
-    private log = new Logger("Converter", process.env.NODE_ENV === "development")
+    private readonly log = new Logger("Converter", process.env.NODE_ENV === "development")
 
     /**
      * The source of the parser.
