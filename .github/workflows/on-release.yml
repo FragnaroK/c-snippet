@@ -7,4 +7,4 @@ on:
 jobs:
   call-publisher:
     uses: fragnarok/Custom-GitHub-Action-Scripts/.github/workflows/build-test-publish-pnpm.yml@main
-    secrets: inherit
+    secrets: inherit 
