@@ -6,7 +6,7 @@ on:
 
 jobs:
   call-external-wokrflow:
-    uses: fragnarok/Custom-GitHub-Action-Scripts/.github/workflows/build-test-publish-npm.yml@main
+    uses: fragnarok/Custom-GitHub-Action-Scripts/.github/workflows/build-test-publish-pnpm.yml@main
     with:
       publish: false
     secrets: inherit
