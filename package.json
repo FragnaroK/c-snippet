@@ -73,7 +73,7 @@
   },
   "dependencies": {
     "@inquirer/prompts": "^7.3.1",
-    "chalk": "4.1.2",
+    "chalk": "5.4.1",
     "cli-spinners": "^2.9.0",
     "cson-parser": "^4.0.9",
     "figlet": "^1.8.0",
