@@ -78,7 +78,7 @@
     "cson-parser": "^4.0.9",
     "figlet": "^1.8.0",
     "htmlparser2": "^10.0.0",
-    "log-symbols": "^4.1.0",
+    "log-symbols": "^7.0.0",
     "node-logger-cli": "^1.0.6",
     "ora": "^3.2.0",
     "xml2js": "^0.6.2",
